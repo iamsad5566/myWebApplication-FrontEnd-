@@ -1,21 +1,23 @@
 import React, {useState, useEffect} from 'react';
 import NavBar from '../nav/nav';
-import Header from '../components/blogger/hearder';
-import MainContent from '../components/blogger/mainContent';
-import axios from 'axios';
-import AuthenticationService from '../api/AuthenticationService';
+import Header from '../components/hearder';
+import MainContent from '../components/mainContent';
+import AuthenticationService from '../api/authenticationService';
+import GetData from '../api/getData';
 
 const BlogIndex = () => {
+    document.title = "my blog";
+    const adminUser = "twyk";
     const[data, setData] = useState([]);
     const[browseTimes, setBrowseTimes] = useState(0);
     
     function getArticle() {
-        axios.get("http://localhost:8080/article/retrieveArticles")
+        GetData.getAllArticles()
             .then( response => {
-                setData(response.data);
+                setData(response.data.reverse());
             }
         ).then(
-            axios.get("http://localhost:8080/article/blogBrowse")
+            GetData.getBlogBrowse()
             .then( response => {
                 setBrowseTimes(response.data);
             })
@@ -24,7 +26,7 @@ const BlogIndex = () => {
   
     useEffect(() => {
         if(AuthenticationService.isUserLoggedIn()) {
-            let token = "Bearer " + sessionStorage.getItem("authenticatedUser");
+            let token = "Bearer " + sessionStorage.getItem(adminUser);
             AuthenticationService.setupAxiosInterceptor(token);
             getArticle();
         }

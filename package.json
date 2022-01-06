@@ -25,7 +25,8 @@
     "start": "PORT=4200 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy-production": "react-scripts build && scp -r ./build/* root@128.199.249.186:/var/www/tw-yk.website/html"
   },
   "eslintConfig": {
     "extends": [

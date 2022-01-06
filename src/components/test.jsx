@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import AuthenticationService from '../api/AuthenticationService';
+import AuthenticationService from '../api/authenticationService';
 import {useDropzone} from "react-dropzone";
 import axios from 'axios';
 
@@ -76,7 +76,7 @@ function Dropzone() {
         formData.append("file", file);
         let token = "Bearer " + sessionStorage.getItem("authenticatedUser");
         AuthenticationService.setupAxiosInterceptor(token);
-        axios.post("http://localhost:8080/article/upload", formData, {headers:{"Content-type":"multipart/form-data"}})
+        axios.post("https://tw-yk.website:8443/article/upload", formData, {headers:{"Content-type":"multipart/form-data"}})
         .then(()=> {
             console.log("file uploaded successfully")
         })

@@ -2,7 +2,7 @@ import React from 'react';
 
 const Table = () => {
     return ( <React.Fragment>
-        <span  style = {{display:"table-cell", verticleAlign:"middle"}}>
+        <span  style = {{display:"table-cell", verticleAlign:"middle",fontSize:"0.9em"}}>
         <h3>EDUCATION</h3>
         <table className="table table-success table-striped">
             <tbody>

@@ -5,10 +5,11 @@ import HomePage from './pages/homePage';
 import ProjectComponent from './components/projectComponent';
 import LoginInterface from './logInComponents/loginEntry';
 import AuthenticatedPost from './logInComponents/AuthenticatedPost';
-import Test from './components/test';
 import BlogIndex from './pages/blogIndex';
-import Post from './components/blogger/post';
+import Post from './components/post';
 import AuthenticatedUpdate from './logInComponents/AuthenticatedUpdate';
+import Psychology from './pages/psychology';
+import Testing from './pages/testing';
 
 class Layout extends React.Component {
     
@@ -20,11 +21,12 @@ class Layout extends React.Component {
                     <Route path = "/" exact element = {<HomePage />}/>
                     <Route path = "/project" element = {<ProjectComponent/>}/>
                     <Route path = "/login" element = {<LoginInterface/>}/>
-                    <Route path = "/test" element = {<Test/>}/>
                     <Route path = "/blog/*" element = {<BlogIndex/>}/>
                     <Route path = "/blog/post/*" element = {<Post/>}/>
                     <Route path = "/blog/add" element = {<AuthenticatedPost/>}/>
                     <Route path = "/blog/update" element = {<AuthenticatedUpdate/>}/>
+                    <Route path = "/psychology" element = {<Psychology/>}/>
+                    <Route path = "/testing" element = {<Testing/>}/>
                 </Routes>
             </BrowserRouter>
         );

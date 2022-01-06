@@ -1,22 +1,26 @@
 import axios from "axios";
 
 class AuthenticationService {
+    serverAddress = "https://tw-yk.website:8443/";
+    testAddress = "http://localhost:8080/";
+    AdminUser = "twyk";
+
     executeJWTAuthenticationService(userName, userPassword) {
-        return axios.post(`http://localhost:8080/auth/login?userName=${userName}&userPassword=${userPassword}`, {userName, userPassword});
+        return axios.post( this.serverAddress + `auth/login?userName=${userName}&userPassword=${userPassword}` )
     }
     
     registerSuccessfulLogin(username, token) {
-        sessionStorage.setItem("authenticatedUser", token);
+        sessionStorage.setItem(username, token);
         this.setupAxiosInterceptor(this.createJWTToken(token));
     }
 
     logout() {
-        sessionStorage.removeItem("authenticatedUser");
-        return axios.get("http://localhost:8080/auth/logout");
+        sessionStorage.removeItem(this.AdminUser);
+        return axios.get( this.serverAddress + "auth/logout");
     }
 
     isUserLoggedIn() {
-        let user = sessionStorage.getItem("authenticatedUser");
+        let user = sessionStorage.getItem(this.AdminUser);
         if(user === null) {
             return false;
         } else {

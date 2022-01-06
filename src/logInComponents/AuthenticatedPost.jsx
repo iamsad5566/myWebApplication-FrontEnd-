@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate } from "react-router-dom";
-import AddPost from '../components/blogger/addPost';
-import AuthenticationService from '../api/AuthenticationService';
+import AddPost from '../components/addPost';
+import AuthenticationService from '../api/authenticationService';
 
 class AuthenticatedPost extends React.Component {
     render() { 

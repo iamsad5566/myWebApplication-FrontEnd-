@@ -1,46 +1,47 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import AuthenticationService from '../../api/AuthenticationService';
-import ManipulateData from '../../api/ManipulateData';
+import AuthenticationService from '../api/authenticationService';
+import ManipulateData from '../api/manipulateData';
 
-class AddPost extends React.Component {
-    state = {
-        successful:false,
-        unsuccessful:false,
-        message:"",        
-    }
+const UpdatePost = () => {
+    const location = useLocation();
+    let {id, title, content} = location.state;
+    const[successful, setSuccessful] = useState(false);
+    const[unsuccessful, setUnsuccessful] = useState(false);
+    const[message, setMessage] = useState("");
+    const adminUser = "twyk";
 
-    onSubmit = value => {
-        let title = value.title;
-        let content = value.content;
-        let token = "Bearer " + sessionStorage.getItem("authenticatedUser");
+    function handleSubmit(value) {
+        let token = "Bearer " + sessionStorage.getItem(adminUser);
         AuthenticationService.setupAxiosInterceptor(token);
-        ManipulateData.savePost(title, content)
+        ManipulateData.updatePost(id, value.title, value.content)
             .then( response => {
-                if(response.status === 200) {
-                    this.setState({successful:true});
-                    this.setState({message:"Your post was successful saved!"});
-                } else {
-                    this.setState({unsuccessful:true});
-                    this.setState({message:"There was something wrong!"});
-                }
-            }).catch (
+                        if(response.status === 202) {
+                            setSuccessful(true);
+                            setMessage("Your post was successful updated!");
+                        } else {
+                            setUnsuccessful(true);
+                            setMessage("There was something wrong!");
+                        }
+                    } 
+            ).catch(
                 () => {
-                    this.setState({unsuccessful:true});
-                    this.setState({message:"There was something wrong!"});
+                    setUnsuccessful(true);
+                    setMessage("There was something wrong!");
                 }
             )
 
         const formData = new FormData();
         formData.append("file", value.file);
-        formData.append("title", title);
+        formData.append("title", value.title);
         
         if(value.file !== undefined)
             return ManipulateData.uploadPicture(formData);
     }
 
-    validate = value => {
+    function validate(value) {
         let error = {};
         if(value.title.length === 0) {
             error.title = "Please set the title!";
@@ -52,29 +53,26 @@ class AddPost extends React.Component {
         
         return error;
     }
-    
-    
 
-    render() {
-        const {successful, unsuccessful, message} = this.state;
-        return <div>
+    return ( 
+        <div>
             <div className="container" style={{textAlign:"center"}}>
-                <Formik initialValues = {{title:"", content:""}}
-                onSubmit={this.onSubmit}
-                validate={this.validate} 
-                validateOnBlur={true}
-                validateOnChange={false}          
+                <Formik initialValues = {{title:title, content:content}}
+                onSubmit={handleSubmit}
+                validate={validate} 
+                validateOnBlur={false}
+                validateOnChange={true}          
                 >
 
                     {
                         formProps => (
                             <Form style = {{textAlign:"center", width:"80%", position:"relative", marginLeft:"3em", marginTop:"5em"}}>
                                 <fieldset className="form-group">
-                                    <ErrorMessage className = "alert alert-warning" name="title" component="div" />
                                     {successful? <div className = "alert alert-success">{message}</div>:<></>}
                                     {unsuccessful? <div className = "alert alert-danger">{message}</div>:<></>}
+                                    <ErrorMessage className = "alert alert-warning" name="title" component="div" />
                                     <label>Title</label>
-                                    <input className="form-control" name = "title" onChange={formProps.handleChange}  autoComplete = "off"/>
+                                    <Field className="form-control" name = "title" autoComplete = "off"/>
                                 </fieldset>
 
                                 <fieldset className="form-group">
@@ -95,11 +93,8 @@ class AddPost extends React.Component {
                     }
                 </Formik>
             </div>
-            
-        </div>;
-    }
+        </div> 
+    );
 }
  
-export default AddPost;
-
-
+export default UpdatePost;

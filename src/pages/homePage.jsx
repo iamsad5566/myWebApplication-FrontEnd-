@@ -5,7 +5,7 @@ import Cover from '../components/cover';
 import Tables from '../components/tables';
 import ProjectComponent from '../components/projectComponent';
 import { Link } from "react-router-dom";
-import AuthenticationService from '../api/AuthenticationService';
+import AuthenticationService from '../api/authenticationService';
 
 class HomePage extends React.Component {
     state = {
@@ -13,7 +13,7 @@ class HomePage extends React.Component {
             {key:1, project:"PPP"},
             {key:2, project:"QQQ"}
         ],
-        loginMessage:"Login if you are YK ",
+        loginMessage:"Login if you are YK "
     }
 
     logout = () => {
@@ -24,7 +24,7 @@ class HomePage extends React.Component {
 
     render() { 
         const hasLoggedIn = AuthenticationService.isUserLoggedIn();
-
+        document.title = "Home page";
         const containerStyle = {
             position:"relative",
             top:"1px"
@@ -38,6 +38,7 @@ class HomePage extends React.Component {
             height:"100vh",
             margin:"auto"
         };
+
         return (
             <React.Fragment>
                 <NavBar />

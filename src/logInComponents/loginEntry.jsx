@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import AuthenticationService from '../api/AuthenticationService';
+import AuthenticationService from '../api/authenticationService';
 
 class LoginInterface extends React.Component {
     state = {
@@ -9,7 +9,6 @@ class LoginInterface extends React.Component {
         hasLoginFailed: false,
         showSuccessMessage: false,
         test:"",
-        token:"",
     }
 
     handleChange = event => {
@@ -17,11 +16,15 @@ class LoginInterface extends React.Component {
     }
 
     loginClicked = event => {
+        // prevent from redirecting 
         event.preventDefault();
+
+        // sent a request to the backend
         AuthenticationService.executeJWTAuthenticationService(this.state.username, this.state.password)
         .then( response => {
+            // register successful login in browser
             AuthenticationService.registerSuccessfulLogin(this.state.username, response.data.token);
-            this.setState( {token:response.data.token});
+            
             this.setState( {showSuccessMessage:true} );
             this.setState( {hasLoginFailed:false} );
         }).catch(

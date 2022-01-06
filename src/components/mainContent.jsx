@@ -1,8 +1,8 @@
 import React from 'react';
-import Pagination from '../pagination';
-import { paginate } from '../../utils/paginate';
+import Pagination from './pagination';
+import { paginate } from '../utils/paginate';
 import Article from './article';
-import AuthenticationService from '../../api/AuthenticationService';
+import AuthenticationService from '../api/authenticationService';
 import { Link } from 'react-router-dom';
 
 class MainContent extends React.Component {
@@ -10,7 +10,6 @@ class MainContent extends React.Component {
     state = {
         currentPage:1,
         pageSize:4,
-        numbersOfItems:5,
         articles: []
     };
 
@@ -18,27 +17,22 @@ class MainContent extends React.Component {
         this.setState({currentPage:page});
     }
 
-    handlePagePlus = page => {
-        if(page+1 <= Math.ceil(this.state.numbersOfItems/this.state.pageSize))
+    handlePagePlus = (page, total) => {
+        if(page < Math.ceil(total/this.state.pageSize))
             this.setState({currentPage:page+1});
     }
 
     handlePageMinus = page => {
-        if(page-1 >= 0)
+        if(page > 1)
             this.setState({currentPage:page-1})
     }
 
-
     render() { 
         const {pageSize, currentPage} = this.state;
-        let {numbersOfItems, artiles:allArticles} = this.state;
-        
-        if(this.props.data.length > 0) {
-            allArticles = this.props.data.reverse();
-            numbersOfItems = allArticles.length;
-        }
-
+        let allArticles = this.props.data;
+        let numbersOfItems = allArticles.length;
         const articles = paginate(allArticles,currentPage, pageSize);
+
         return (
             <div>
                 <div className="container px-4 px-lg-5">
