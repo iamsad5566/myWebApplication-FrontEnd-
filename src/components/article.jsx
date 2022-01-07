@@ -28,6 +28,14 @@ const Article = props => {
         .then(setTimeout(() => window.location.reload(), 50));
     }
 
+    const styleForUpdateButton = {
+        color:"white"
+    }
+
+    const styleForDeleteButton = {
+        marginLeft:"1em"
+    }
+
     return ( 
         <React.Fragment>
             <div className="post-preview">
@@ -42,8 +50,8 @@ const Article = props => {
                     <a href="#!">{"  Yen-Kuang  "}</a>
                     on {date}
                 </p>
-                {AuthenticationService.isUserLoggedIn()? <Link className = "btn btn-success btn-sm" to = {"/blog/update"} state = {{id:id, title:title, content:content}} style={{color:"white"}}>Update</Link>:<></>}
-                {AuthenticationService.isUserLoggedIn()? <button className = "btn btn-danger btn-sm" style = {{marginLeft:"1em"}} onClick={() => handleDelete(id)} >Delete</button>:<></>}
+                {AuthenticationService.isUserLoggedIn()? <Link className = "btn btn-success btn-sm" to = {"/blog/update"} state = {{id:id, title:title, content:content}} style={styleForUpdateButton}>Update</Link>:<></>}
+                {AuthenticationService.isUserLoggedIn()? <button className = "btn btn-danger btn-sm" style = {styleForDeleteButton} onClick={() => handleDelete(id)} >Delete</button>:<></>}
                 {AuthenticationService.isUserLoggedIn()? <p> {`觀看次數：${articleBrowse}`} </p>:<></>}
             </div>
             <hr className="my-4" />

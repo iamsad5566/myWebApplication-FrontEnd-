@@ -14,7 +14,7 @@ class Post extends React.Component {
         date: "",
         picture: "",
         keyValue: 0,
-        adminUser: "twyk"
+        adminUser: ""
     }
 
     getArticleAndPic = addressId => {
@@ -66,10 +66,18 @@ class Post extends React.Component {
         let contentArray = content.split("\n");
         document.title = title;
 
+        const styleForBackgroundImage = {
+            backgroundImage:`url(${url})`
+        }
+
+        const styleForPostInfo = {
+            marginTop:"2em"
+        }
+
         return (
             <React.Fragment>
             <NavBar/>
-            <header className="masthead" style={{backgroundImage:`url(${url})`}}>
+            <header className="masthead" style={styleForBackgroundImage}>
                 <div className="container position-relative px-4 px-lg-5">
                 <Link to = "/blog">
                     <svg xmlns="//www.w3.org/2000/svg" width="50" height="50" fill="currentColor" className="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
@@ -81,7 +89,7 @@ class Post extends React.Component {
                         <div className="col-md-10 col-lg-8 col-xl-7">
                             <div className="post-heading">
                                 <h1>{title}</h1>
-                                <span className="meta" style = {{marginTop:"2em"}}>
+                                <span className="meta" style = {styleForPostInfo}>
                                     {"Posted by "}
                                     <a href="#!">{" Yen-Kuang "}</a>
                                     {" on"} {date}

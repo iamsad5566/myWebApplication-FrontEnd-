@@ -37,16 +37,41 @@ class LoginInterface extends React.Component {
 
     render() { 
         
+        const styleForContainer = {
+            textAlign:"center", 
+            marginTop:"40vh"
+        }
+
+        const styleForUserPasswordInput = {
+            display:"block",
+            position:"relative",
+            marginLeft:"1vh", 
+            marginTop:"1vh"
+        }
+
+        const styleForLoginButton = {
+            display:"block",
+            position:"relative",
+            marginRight:"2vh", 
+            marginTop:"1vh"
+        }
+
+        const styleForGoBackButton = {
+            marginTop:"40vh", 
+            marginRight:"10vh", 
+            textAlign:"right"
+        }
+
         return (
-        <div style = {{textAlign:"center", marginTop:"40vh"}}>
+        <div style = {styleForContainer}>
             <form>
                 <span> User Name: <input type = "text" name = "username" value = {this.state.username} onChange={this.handleChange} autoComplete="off"/> </span>
-                <span style = {{display:"block",position:"relative",marginLeft:"1vh", marginTop:"1vh"}}> Password: <input type = "text" name = "password" value = {this.state.password} onChange={this.handleChange} autoComplete="off"/> </span>
-                <span style = {{display:"block",position:"relative",marginRight:"2vh", marginTop:"1vh"}}> <button className= "btn btn-warning" type = "submit" onClick={this.loginClicked}>Login</button> </span>
+                <span style = {styleForUserPasswordInput}> Password: <input type = "text" name = "password" value = {this.state.password} onChange={this.handleChange} autoComplete="off"/> </span>
+                <span style = {styleForLoginButton}> <button className= "btn btn-warning" type = "submit" onClick={this.loginClicked}>Login</button> </span>
             </form>
             {this.state.hasLoginFailed && <div className="alert alert-danger"> Invalid credential! </div>}
             {this.state.showSuccessMessage && <div className="alert alert-success"> Welcome back, Yen-Kuang! You can manage your website {<Link to = {"/"}> here </Link>} </div>}
-            <div style = {{marginTop:"40vh", marginRight:"10vh", textAlign:"right"}}>
+            <div style = {styleForGoBackButton}>
                 <Link to="/" className = "btn btn-danger"> go back </Link>
             </div>
         </div>);

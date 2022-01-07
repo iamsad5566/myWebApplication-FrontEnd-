@@ -9,7 +9,7 @@ class AddPost extends React.Component {
         successful:false,
         unsuccessful:false,
         message:"",
-        adminUser:"twyk"
+        adminUser:""
     }
 
     onSubmit = value => {
@@ -56,8 +56,29 @@ class AddPost extends React.Component {
     
     render() {
         const {successful, unsuccessful, message} = this.state;
+
+        const styleForContainer = {
+            textAlign:"center"
+        }
+
+        const styleForForm = {
+            textAlign:"center", 
+            width:"80%", 
+            position:"relative", 
+            marginLeft:"3em", 
+            marginTop:"5em"
+        }
+
+        const styleForTextArea = {
+            height:"500px"
+        }
+
+        const styleForFileInput = {
+            marginTop:"2em"
+        }
+
         return <div>
-            <div className="container" style={{textAlign:"center"}}>
+            <div className="container" style={styleForContainer}>
                 <Formik initialValues = {{title:"", content:""}}
                 onSubmit={this.onSubmit}
                 validate={this.validate} 
@@ -67,7 +88,7 @@ class AddPost extends React.Component {
 
                     {
                         formProps => (
-                            <Form style = {{textAlign:"center", width:"80%", position:"relative", marginLeft:"3em", marginTop:"5em"}}>
+                            <Form style = {styleForForm}>
                                 <fieldset className="form-group">
                                     <ErrorMessage className = "alert alert-warning" name="title" component="div" />
                                     {successful? <div className = "alert alert-success">{message}</div>:<></>}
@@ -79,10 +100,10 @@ class AddPost extends React.Component {
                                 <fieldset className="form-group">
                                     <ErrorMessage className = "alert alert-warning" name="content" component="div" />
                                     <label>content</label>
-                                    <Field className="form-control" component = "textarea" name = "content" autoComplete = "off" style={{height:"500px"}} />
+                                    <Field className="form-control" component = "textarea" name = "content" autoComplete = "off" style={styleForTextArea} />
                                 </fieldset>
 
-                                <div className="input-group mb-3"  style = {{marginTop:"2em"}}>
+                                <div className="input-group mb-3"  style = {styleForFileInput}>
                                     <input type="file" className="form-control" name="file" onChange={event => formProps.setFieldValue("file", event.target.files[0])}/>
                                    <label className="input-group-text" form="inputGroupFile02">Upload</label>
                                 </div>

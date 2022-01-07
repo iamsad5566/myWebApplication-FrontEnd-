@@ -7,7 +7,8 @@ import GetData from '../api/getData';
 
 const BlogIndex = () => {
     document.title = "my blog";
-    const adminUser = "twyk";
+    const adminUser = "";
+
     const[data, setData] = useState([]);
     const[browseTimes, setBrowseTimes] = useState(0);
     
@@ -41,13 +42,17 @@ const BlogIndex = () => {
         }
     }, []);
 
+    const styleForBrowseTimes = {
+        textAlign:"center"
+    }
+
     return ( 
         <div>
             <React.Fragment>
                 <NavBar/>
                 <Header/>
                 <MainContent data = {data}/>
-                {AuthenticationService.isUserLoggedIn()? <div style={{textAlign:"center"}}> {`部落格瀏覽次數：${browseTimes}`} </div>:<></>}
+                {AuthenticationService.isUserLoggedIn()? <div style={styleForBrowseTimes}> {`部落格瀏覽次數：${browseTimes}`} </div>:<></>}
             </React.Fragment>
         </div>
     );

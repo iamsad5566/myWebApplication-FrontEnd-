@@ -16,7 +16,7 @@ const Psychology = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    let style = {
+    let styleForContainer = {
             height:"100vh",
             textAlign:"center",
             display:"flex", 
@@ -26,7 +26,7 @@ const Psychology = () => {
         }
     
     return ( 
-        <div style = {style}> 
+        <div style = {styleForContainer}> 
             <div>
                 施工中......
             {number === 0? <Navigate to = "/" />:number} 秒後重新導向首頁

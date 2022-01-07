@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProjectComponent = props => {
+const Works = props => {
     return ( 
         <div>
             <li style = {{marginTop:"5vh", fontWeight:"bold"}}>
@@ -10,4 +10,4 @@ const ProjectComponent = props => {
      );
 }
  
-export default ProjectComponent;
+export default Works;

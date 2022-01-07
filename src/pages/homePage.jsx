@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import NavBar from '../nav/nav';
 import Cover from '../components/cover';
 import Tables from '../components/tables';
-import ProjectComponent from '../components/projectComponent';
+import Works from '../components/works';
 import { Link } from "react-router-dom";
 import AuthenticationService from '../api/authenticationService';
 
@@ -25,12 +25,12 @@ class HomePage extends React.Component {
     render() { 
         const hasLoggedIn = AuthenticationService.isUserLoggedIn();
         document.title = "Home page";
-        const containerStyle = {
+        const styleForContainer = {
             position:"relative",
-            top:"1px"
+            top:"1px",
         };
 
-        const fullCoverStyle = {
+        const styleForFullCover = {
             position:"relative",
             display:"flex",
             alignItem:"center",
@@ -39,33 +39,43 @@ class HomePage extends React.Component {
             margin:"auto"
         };
 
+        const styleForPutInCenter = {
+            display:"flex", 
+            alignItems:"center", 
+            justifyContent:"center"
+        }
+
+        const styleForFooter = {
+            height: "auto"
+        }
+
         return (
             <React.Fragment>
                 <NavBar />
-                <div className = "container-fluid" style = {containerStyle}>
+                <div className = "container-fluid" style = {styleForContainer}>
                     
-                    <div className = "row" style = {fullCoverStyle}>
+                    <div className = "row" style = {styleForFullCover}>
                         <Cover />
                     </div>
 
-                    <div className = "row" style = {containerStyle}>
-                        <div className = "col-sm-4 p-3" style = {{display:"flex", alignItems:"center", justifyContent:"center"}}>
+                    <div className = "row" style = {styleForContainer}>
+                        <div className = "col-sm-4 p-3" style = {styleForPutInCenter}>
                             <img className = "img-fluid" src = "./myPic.jpeg" alt = "AAA"/>
                         </div >
 
-                        <div className = "col-sm-8 p-3" style = {{display:"flex", alignItems:"center", justifyContent:"center"}}>
+                        <div className = "col-sm-8 p-3" style = {styleForPutInCenter}>
                             <Tables />
                         </div >
                     </div>
 
-                    <div className = "row" style = {fullCoverStyle}>
+                    <div className = "row" style = {styleForFullCover}>
                         <div style = {{marginTop:"10vh"}}> 
                             <h1>My works</h1>
-                            {this.state.works.map(project => <ProjectComponent key = {project.key} project = {project}/>)}
+                            {this.state.works.map(project => <Works key = {project.key} project = {project}/>)}
                         </div>
                     </div>
 
-                    <div className = "row" style = {{backgtroundColor:"green", height:"30px"}}>
+                    <div className = "row" style = {styleForFooter}>
                         <div className = "d-grid gap-2 d-md-flex justify-content-md-end">
                             {!hasLoggedIn? <Link to="/login" className = "btn btn-primary"> {this.state.loginMessage} </Link> : <Link to="/" className = "btn btn-warning" onClick={this.logout}> Logout </Link>}
                         </div>

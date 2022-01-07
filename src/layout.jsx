@@ -2,7 +2,7 @@ import React from 'react';
 // eslint-disable-next-line
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/homePage';
-import ProjectComponent from './components/projectComponent';
+import Works from './components/works';
 import LoginInterface from './logInComponents/loginEntry';
 import AuthenticatedPost from './logInComponents/AuthenticatedPost';
 import BlogIndex from './pages/blogIndex';
@@ -19,7 +19,7 @@ class Layout extends React.Component {
             <BrowserRouter>
                 <Routes>
                     <Route path = "/" exact element = {<HomePage />}/>
-                    <Route path = "/project" element = {<ProjectComponent/>}/>
+                    <Route path = "/project" element = {<Works/>}/>
                     <Route path = "/login" element = {<LoginInterface/>}/>
                     <Route path = "/blog/*" element = {<BlogIndex/>}/>
                     <Route path = "/blog/post/*" element = {<Post/>}/>
