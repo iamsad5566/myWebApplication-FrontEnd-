@@ -35,8 +35,7 @@ const BlogIndex = () => {
         else {
             AuthenticationService.executeJWTAuthenticationService("guest", "guest")
                 .then( response => {
-                    AuthenticationService.setupAxiosInterceptor(AuthenticationService.createJWTToken(response.data.token));
-                    sessionStorage.setItem("guestAuthenticaiton", response.data.token);
+                    AuthenticationService.registerSuccessfulLogin("guest", response.data.token);
                     getArticle();
                 });
         }

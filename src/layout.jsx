@@ -2,7 +2,6 @@ import React from 'react';
 // eslint-disable-next-line
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/homePage';
-import Works from './components/works';
 import LoginInterface from './logInComponents/loginEntry';
 import AuthenticatedPost from './logInComponents/AuthenticatedPost';
 import BlogIndex from './pages/blogIndex';
@@ -10,6 +9,7 @@ import Post from './components/post';
 import AuthenticatedUpdate from './logInComponents/AuthenticatedUpdate';
 import Psychology from './pages/psychology';
 import Testing from './pages/testing';
+import AddWork from './components/addWork';
 
 class Layout extends React.Component {
     
@@ -18,8 +18,7 @@ class Layout extends React.Component {
         return (
             <BrowserRouter>
                 <Routes>
-                    <Route path = "/" exact element = {<HomePage />}/>
-                    <Route path = "/project" element = {<Works/>}/>
+                    <Route path = "/" exact element = {<HomePage/>}/>
                     <Route path = "/login" element = {<LoginInterface/>}/>
                     <Route path = "/blog/*" element = {<BlogIndex/>}/>
                     <Route path = "/blog/post/*" element = {<Post/>}/>
@@ -27,6 +26,7 @@ class Layout extends React.Component {
                     <Route path = "/blog/update" element = {<AuthenticatedUpdate/>}/>
                     <Route path = "/psychology" element = {<Psychology/>}/>
                     <Route path = "/testing" element = {<Testing/>}/>
+                    <Route path = "/addWork" element = {<AddWork/>}/>
                 </Routes>
             </BrowserRouter>
         );
