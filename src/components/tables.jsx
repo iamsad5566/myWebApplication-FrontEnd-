@@ -1,10 +1,28 @@
 import React from 'react';
 
 const Table = () => {
+    const styleForTables = {
+        display:"table-cell", 
+        verticleAlign:"middle",
+        fontSize:"0.9em"
+    }
+
+    const styleForSecond = {
+        marginTop:"5vh"
+    }
+
+    const styleForThird = {
+        marginTop:"5vh"
+    }
+
+    const styleForTh = {
+        textAlign:"left"
+    }
+
     return ( <React.Fragment>
-        <span  style = {{display:"table-cell", verticleAlign:"middle",fontSize:"0.9em"}}>
+        <span  style = {styleForTables}>
         <h3>EDUCATION</h3>
-        <table className="table table-success table-striped">
+        <table className="table table-primary table-striped">
             <tbody>
                 <tr>
                 <th scope="row">2011 - 2016</th>
@@ -13,7 +31,7 @@ const Table = () => {
                 </tr>
 
                 <tr>
-                <th scope="row" style = {{textAlign:"center"}}>B.A.</th>
+                <th scope="row" style = {styleForTh}>B.A.</th>
                 <td>National ChengChi University</td>
                 <td>Department of Psychology</td>
                 </tr>
@@ -25,7 +43,7 @@ const Table = () => {
                 </tr>
 
                 <tr>
-                <th scope="row" style = {{textAlign:"center"}}>M.A.</th>
+                <th scope="row" style = {styleForTh}>M.A.</th>
                 <td>National Taiwan University</td>
                 <td>Department of Psychology</td>
                 </tr>
@@ -33,8 +51,8 @@ const Table = () => {
             </tbody>
         </table>
 
-        <h3 style = {{marginTop: "5vh"}}>EMPLOYMENT</h3>
-        <table className="table table-primary table-striped">
+        <h3 style = {styleForSecond}>EMPLOYMENT</h3>
+        <table className="table table-info table-striped">
             <tbody>
                 <tr>
                 <th scope="row"> 2021 - 2022 </th>
@@ -64,15 +82,15 @@ const Table = () => {
             </tbody>
         </table>
 
-        <h3 style = {{marginTop: "5vh"}}> CONFERENCE PRESENTATIONS </h3>
-        <table className="table table-warning table-striped">
+        <h3 style = {styleForThird}> CONFERENCE PRESENTATIONS </h3>
+        <table className="table table-success table-striped">
             <tbody>
                 <tr>
-                <th scope="row" style={{textAlign:"left"}}> "P3b does not reflect perceived contrasts," Association for the Scientific Study of Consciousness, Speaker, Virtual Meeting, June 2021. </th>
+                <th scope="row" style={styleForTh}> "P3b does not reflect perceived contrasts," Association for the Scientific Study of Consciousness, Speaker, Virtual Meeting, June 2021. </th>
                 </tr>
 
                 <tr>
-                <th scope="row" style={{textAlign:"left"}}> "NCC, P3b, and no-report paradigms" Society for Philosophy and Psychology, 47th Annual Meeting, 2021. Virtual Princeton, NJ, United States, June 28-July 2, 2021. </th>
+                <th scope="row" style={styleForTh}> "NCC, P3b, and no-report paradigms" Society for Philosophy and Psychology, 47th Annual Meeting, 2021. Virtual Princeton, NJ, United States, June 28-July 2, 2021. </th>
                 </tr>
             </tbody>
         </table>

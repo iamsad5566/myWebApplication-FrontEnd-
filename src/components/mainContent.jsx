@@ -38,16 +38,17 @@ class MainContent extends React.Component {
                 <div className="container px-4 px-lg-5">
                     <div className="row gx-4 gx-lg-5 justify-content-center">
                         <div className="col-md-10 col-lg-8 col-xl-7">
-                            {AuthenticationService.isUserLoggedIn()? <Link to = "/blog/add" className = "btn btn-primary" style={{marginBottom:"3em"}}>New Post</Link>:<></>}
-                            {articles.map( article => (<Article key={article.id} id = {article.id} title={article.title} content={article.content} date = {article.date}/>) )}
+                                {AuthenticationService.isUserLoggedIn()? <Link to = "/blog/add" className = "btn btn-primary" style={{marginBottom:"3em"}}>New Post</Link>:<></>}
+                                {articles.map( article => (<Article key={article.id} id = {article.id} title={article.title} content={article.content} date = {article.date}/>) )}
                             
-                            <Pagination 
-                            currentPage = {currentPage}
-                            pageSize = {pageSize} 
-                            numbersOfItems = {numbersOfItems} 
-                            handlePageChange = {this.handlePageChange}
-                            handlePageMinus = {this.handlePageMinus}
-                            handlePagePlus = {this.handlePagePlus}/>
+                                <Pagination 
+                                currentPage = {currentPage}
+                                pageSize = {pageSize} 
+                                numbersOfItems = {numbersOfItems} 
+                                handlePageChange = {this.handlePageChange}
+                                handlePageMinus = {this.handlePageMinus}
+                                handlePagePlus = {this.handlePagePlus}/>
+                           
                         </div>
                     </div>
                 </div>

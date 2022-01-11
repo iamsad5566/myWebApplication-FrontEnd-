@@ -1,7 +1,8 @@
 import React from 'react';
+import AuthenticationService from '../api/authenticationService';
 
 const Works = props => {
-    const {id, title, url, iconUrl} = props;
+    const {id, title, url, iconUrl, handleDeleteWork} = props;
     
     const styleForWorks = {
         marginTop:"5vh",
@@ -20,6 +21,7 @@ const Works = props => {
                 <a href={url} style={styleForUrl}>
                     <img src = {iconUrl} alt = "Click me!"/>
                 </a> 
+                {AuthenticationService.isUserLoggedIn()? <button className='btn btn-danger my-3' onClick = {() => handleDeleteWork(title)}> Delete </button>: <></>}
             </h4>
         </div>
      );

@@ -14,7 +14,7 @@ class Post extends React.Component {
         date: "",
         picture: "",
         keyValue: 0,
-        adminUser: ""
+        adminUser: "twyk"
     }
 
     getArticleAndPic = addressId => {

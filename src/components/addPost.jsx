@@ -9,7 +9,7 @@ class AddPost extends React.Component {
         successful:false,
         unsuccessful:false,
         message:"",
-        adminUser:""
+        adminUser:"twyk"
     }
 
     onSubmit = value => {
@@ -65,7 +65,7 @@ class AddPost extends React.Component {
             textAlign:"center", 
             width:"80%", 
             position:"relative", 
-            marginLeft:"3em", 
+            marginLeft:"2em", 
             marginTop:"5em"
         }
 

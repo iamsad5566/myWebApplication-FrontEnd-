@@ -3,7 +3,7 @@ import axios from "axios";
 class AuthenticationService {
     serverAddress = "https://tw-yk.website:8443/";
     testAddress = "http://localhost:8080/";
-    AdminUser = "";
+    AdminUser = "twyk";
 
     executeJWTAuthenticationService(userName, userPassword) {
         return axios.post( this.serverAddress + `auth/login?userName=${userName}&userPassword=${userPassword}` )

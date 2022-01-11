@@ -7,7 +7,7 @@ import GetData from '../api/getData';
 
 const BlogIndex = () => {
     document.title = "my blog";
-    const adminUser = "";
+    const adminUser = "twyk";
 
     const[data, setData] = useState([]);
     const[browseTimes, setBrowseTimes] = useState(0);

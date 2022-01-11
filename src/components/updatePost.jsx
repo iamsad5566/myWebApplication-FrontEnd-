@@ -11,7 +11,7 @@ const UpdatePost = () => {
     const[successful, setSuccessful] = useState(false);
     const[unsuccessful, setUnsuccessful] = useState(false);
     const[message, setMessage] = useState("");
-    const adminUser = "";
+    const adminUser = "twyk";
 
     function handleSubmit(value) {
         let token = "Bearer " + sessionStorage.getItem(adminUser);

@@ -13,7 +13,7 @@ class ManipulateWorks {
     }
 
     deleteWork(title) {
-        return axios.delete( this.serverAddress + `deleteWork/${title}` )
+        return axios.delete( this.serverAddress + `works/deleteWork/${title}` )
     }
 }
 

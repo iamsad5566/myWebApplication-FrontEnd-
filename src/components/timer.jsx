@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const Timer = props => {
+  const {pictureList, sentences} = props;
   const [seconds, setSeconds] = useState(0);
   const [index, setIndex] = useState(0);
   const [op, setOpacity] = useState(0);
@@ -8,12 +9,12 @@ const Timer = props => {
   useEffect(() => {
     const interval = setInterval(() => {
       setSeconds(seconds => seconds + 0.01);
-      setOpacity(op => op + 0.005);
+      setOpacity(op => op + 0.0025);
     }, 10);
     return () => clearInterval(interval);
   }, []);
 
-  if(Math.floor(seconds) === 3) {
+  if(Math.floor(seconds) === 4) {
     setSeconds(seconds => 0);
     setIndex(index => index + 1);
     setOpacity(op => 0);
@@ -23,7 +24,15 @@ const Timer = props => {
     setIndex(index => 0);
   }
 
-  const fontStyle = {
+  const styleForFormat = {
+    margin:"auto",
+    position:"relative",
+    textAlign:"left",
+    height:"auto",
+    width:"100%"
+  }
+
+  const styleForFont = {
     display:"flex",
     justifyContent:"center",
     alignItems:"center",
@@ -35,18 +44,29 @@ const Timer = props => {
     testHeight:"50px"
   };
 
-  var picStyle = {
+  var styleForPic = {
     opacity: op
   }
 
+  const styleForHide = {
+    display:"none"
+  }
+
+  let keyVal = 0;
+
   return (
     <React.Fragment>
-      <div className = "col-sm 8" style = {{margin:"auto"}}>
-       <img className = "img-fluid" src = {props.pictureList[Math.floor(index)].url} alt = "qq" style = {picStyle}/>   
+        <div style = {styleForHide}> 
+          {pictureList.map( picture => {
+            return <img key = {keyVal} src = {picture.url} alt="qq"/>
+          } )}
+        </div>
+      <div className = "col-sm 8" style = {styleForFormat}>
+          <img className = "img-fluid" src = {pictureList[index].url} alt = "qq" style = {styleForPic} loading = "lazy"/>
       </div>
 
-      <div className = "col-sm-4" style = {fontStyle}>
-          <p style = {{opacity:op}}>{props.sentences[Math.floor(index)]}</p>
+      <div className = "col-sm-4" style = {styleForFont}>
+          <p style = {styleForPic}>{sentences[index]}</p>
       </div>
     </React.Fragment>
   );
