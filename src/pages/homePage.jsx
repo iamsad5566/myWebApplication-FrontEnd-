@@ -110,7 +110,7 @@ class HomePage extends React.Component {
         }
 
         const styleForLeetCodeIcon = {
-            marginLeft:"3vh"d
+            marginLeft:"3vh"
         }
 
         const styleForIcon = {

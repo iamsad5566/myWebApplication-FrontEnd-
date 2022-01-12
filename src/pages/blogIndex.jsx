@@ -10,7 +10,8 @@ const BlogIndex = () => {
     const adminUser = "twyk";
 
     const[data, setData] = useState([]);
-    const[browseTimes, setBrowseTimes] = useState(0);
+    const[todayBrowseTimes, setTodayBrowseTimes] = useState(0);
+    const[totalBrowseTimes, setTotalBrowseTimes] = useState(0);
     
     function getArticle() {
         GetData.getAllArticles()
@@ -20,7 +21,8 @@ const BlogIndex = () => {
         ).then(
             GetData.getBlogBrowse()
             .then( response => {
-                setBrowseTimes(response.data);
+                setTodayBrowseTimes(response.data[0]);
+                setTotalBrowseTimes(response.data[1]);
             })
         )
     }
@@ -51,7 +53,7 @@ const BlogIndex = () => {
                 <NavBar/>
                 <Header/>
                 <MainContent data = {data}/>
-                {AuthenticationService.isUserLoggedIn()? <div style={styleForBrowseTimes}> {`部落格瀏覽次數：${browseTimes}`} </div>:<></>}
+                {AuthenticationService.isUserLoggedIn()? <div style={styleForBrowseTimes}> <p>{`今日瀏覽次數：${todayBrowseTimes}， 總瀏覽次數：${totalBrowseTimes}`}</p> </div>:<></>}
             </React.Fragment>
         </div>
     );
