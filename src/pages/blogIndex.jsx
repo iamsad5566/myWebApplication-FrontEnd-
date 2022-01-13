@@ -1,17 +1,25 @@
 import React, {useState, useEffect} from 'react';
+import DocumentMeta from 'react-document-meta';
 import NavBar from '../nav/nav';
 import Header from '../components/hearder';
 import MainContent from '../components/mainContent';
 import AuthenticationService from '../api/authenticationService';
 import GetData from '../api/getData';
 
-const BlogIndex = () => {
-    document.title = "my blog";
+const BlogIndex = props => {
     const adminUser = "twyk";
-
     const[data, setData] = useState([]);
     const[todayBrowseTimes, setTodayBrowseTimes] = useState(0);
     const[totalBrowseTimes, setTotalBrowseTimes] = useState(0);
+
+    const meta = {
+        title:"Yen-Kuang's Blog",
+        description:"Wellcome to my blog, I will share about books that I love here!",
+        canonical:"https://tw-yk.website/blog",
+        meta:{
+            charset:"utf-8"
+        }
+    }
     
     function getArticle() {
         GetData.getAllArticles()
@@ -50,10 +58,12 @@ const BlogIndex = () => {
     return ( 
         <div>
             <React.Fragment>
+                <DocumentMeta {...meta}>
                 <NavBar/>
                 <Header/>
                 <MainContent data = {data}/>
                 {AuthenticationService.isUserLoggedIn()? <div style={styleForBrowseTimes}> <p>{`今日瀏覽次數：${todayBrowseTimes}， 總瀏覽次數：${totalBrowseTimes}`}</p> </div>:<></>}
+                </DocumentMeta>
             </React.Fragment>
         </div>
     );

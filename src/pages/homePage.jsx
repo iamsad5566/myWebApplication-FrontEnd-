@@ -7,6 +7,7 @@ import Works from '../components/works';
 import { Link } from "react-router-dom";
 import AuthenticationService from '../api/authenticationService';
 import ManipulateWorks from '../api/manipulateWorks';
+import DocumentMeta from 'react-document-meta';
 
 class HomePage extends React.Component {
     state = {
@@ -17,14 +18,18 @@ class HomePage extends React.Component {
     }
 
     logout = () => {
-        AuthenticationService.logout();
-        alert("Logged out");
-        this.setState( {loginMessage: "Login if you are YK "} );
+        if(window.confirm("Are you sure to logout?")) {
+            AuthenticationService.logout();
+            alert("Logged out");
+            this.setState( {loginMessage: "Login if you are YK "} );
+        }
     }
 
     handleDeleteWork = title => {
-        ManipulateWorks.deleteWork(title)
-        .then(setTimeout(() => window.location.reload(), 50));
+        if(window.confirm("Are you sure to delete this?")) {
+            ManipulateWorks.deleteWork(title)
+            .then(setTimeout(() => window.location.reload(), 50));
+        }
     }
 
     componentDidMount() {
@@ -57,9 +62,9 @@ class HomePage extends React.Component {
     }
 
     render() { 
+        
         let {works, workKey} = this.state;
         const hasLoggedIn = AuthenticationService.isUserLoggedIn();
-        document.title = "Home page";
         const styleForContainer = {
             position:"relative",
             top:"1px",
@@ -117,8 +122,18 @@ class HomePage extends React.Component {
             marginRight:"1vh"
         }
 
+        const meta = {
+            title:"Yen-Kuang's web",
+            description:"Hello! this is Yen-Kuang, wellcome to my website!",
+            canonical:"https://tw-yk.website",
+            meta:{
+                charset:"utf-8"
+            }
+        }
+
         return (
             <React.Fragment>
+                <DocumentMeta {...meta}>
                 <NavBar />
                 <div className = "container-fluid" style = {styleForContainer}>
                     
@@ -154,7 +169,7 @@ class HomePage extends React.Component {
                         <div className="col-md-4 d-flex align-items-center">
                         <a href="/" className="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
                             <svg className="bi" width="30" height="30"></svg>
-                            <span className="text-muted"><img src = "gorilla.ico"/></span>
+                            <span className="text-muted"><img src = "gorilla.ico" alt = "qq"/></span>
                         </a>
 
                         <a href = "https://leetcode.com/chen3210g/" target="_blank" rel ="noreferrer" style={styleForLeetCodeIcon}>
@@ -186,6 +201,7 @@ class HomePage extends React.Component {
                         </ul>
                     </footer>
                 </div>
+                </DocumentMeta>
         </React.Fragment>);
     }
 }

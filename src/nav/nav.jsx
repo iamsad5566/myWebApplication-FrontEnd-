@@ -9,8 +9,8 @@ class NavBar extends React.Component {
     refreshThePage = () => {
         setTimeout(() => {window.location.reload();}, 10);
     }
-
     render() { 
+        
         controller();
         return (
         <div>
@@ -23,7 +23,8 @@ class NavBar extends React.Component {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarResponsive">
                         <ul className="navbar-nav ms-auto py-4 py-lg-0">
-                            <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="/blog" onClick={this.refreshThePage}>myBlog</Link></li>
+                            <li className="nav-item">
+                                <Link className="nav-link px-lg-3 py-3 py-lg-4" to="/blog" onClick={this.refreshThePage}>myBlog</Link></li>
                             <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="/psychology">心理學專區</Link></li>
                             <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="/testing">Testing thought</Link></li>
                         </ul>

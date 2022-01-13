@@ -10,6 +10,7 @@ const Article = props => {
     const [articleTodayBrowse, setArticleTodayBrowse] = useState(0);
     const [articleAllBrowse, setArticleAllBrowse] = useState(0);
     const contentArray = content.split("\n");
+
     let subKey = 0;
 
     useEffect(() => {
@@ -26,8 +27,10 @@ const Article = props => {
     } ,[])
     
     function handleDelete(id) {
-        ManipulateData.delete(id)
-        .then(setTimeout(() => window.location.reload(), 50));
+        if(window.confirm("Are you sure to delete it?")) {
+            ManipulateData.delete(id)
+            .then(setTimeout(() => window.location.reload(), 50));
+        }
     }
 
     const styleForUpdateButton = {
