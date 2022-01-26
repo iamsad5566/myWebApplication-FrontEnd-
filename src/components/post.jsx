@@ -44,6 +44,8 @@ class Post extends React.Component {
     }
 
     componentDidMount() {
+        setTimeout(()=>{}, 50);
+        
         const addressId = this.state.postId;
         if(AuthenticationService.isUserLoggedIn()) {
             let token = "Bearer " + sessionStorage.getItem(this.state.adminUser);

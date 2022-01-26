@@ -9,7 +9,8 @@ import Post from './components/post';
 import AuthenticatedUpdate from './logInComponents/AuthenticatedUpdate';
 import Psychology from './pages/psychology';
 import Testing from './pages/testing';
-import AddWork from './components/addWork';
+import CounsellingContainer from './components/psyPageComponents/counsellingPsycholgist/counsellingContainer';
+import AuthenticatedAddWork from './logInComponents/AuthenticatedAddWork';
 
 class Layout extends React.Component {
     
@@ -18,15 +19,19 @@ class Layout extends React.Component {
         return (
             <BrowserRouter>
                 <Routes>
-                    <Route path = "/" exact element = {<HomePage/>}/>
-                    <Route path = "/login" element = {<LoginInterface/>}/>
-                    <Route path = "/blog/*" element = {<BlogIndex/>}/>
-                    <Route path = "/blog/post/*" element = {<Post/>}/>
-                    <Route path = "/blog/add" element = {<AuthenticatedPost/>}/>
-                    <Route path = "/blog/update" element = {<AuthenticatedUpdate/>}/>
-                    <Route path = "/psychology" element = {<Psychology/>}/>
-                    <Route path = "/testing" element = {<Testing/>}/>
-                    <Route path = "/addWork" element = {<AddWork/>}/>
+                    <Route index element = {<HomePage/>}/>
+                    <Route path = "login" element = {<LoginInterface/>}/>
+
+                    <Route path = "blog/*" element = {<BlogIndex/>}/>
+                    <Route path = "blog/:postId" element = {<Post/>}/>
+                    <Route path = "blog/add" element = {<AuthenticatedPost/>}/>
+                    <Route path = "blog/update" element = {<AuthenticatedUpdate/>}/>
+                    
+                    <Route path = "psychology/*" element = {<Psychology/>}/>
+                    <Route path = "psychology/counsellingPsychologist" element={<CounsellingContainer/>}/>
+
+                    <Route path = "testing" element = {<Testing/>}/>
+                    <Route path = "addWork" element = {<AuthenticatedAddWork/>}/>
                 </Routes>
             </BrowserRouter>
         );

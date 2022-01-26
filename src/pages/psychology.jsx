@@ -1,35 +1,24 @@
-import React, {useState, useEffect} from 'react';
-import {Navigate} from "react-router-dom";
+import React from 'react';
+import NavBar from '../nav/nav';
+import PsyMainContent from '../components/psyPageComponents/psyMainContent';
+import DocumentMeta from 'react-document-meta';
 
 const Psychology = () => {
-    const[number, setNumber] = useState(5);
-    let counter = 0;
-    useEffect(()=>{
-        const interval = setInterval(() => {
-            counter++;
-            if(counter === 5)
-                clearInterval(interval);
-            setNumber(number => number - 1);
-        }, 1000);
-
-        return () => clearInterval(interval);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    let styleForContainer = {
-            height:"100vh",
-            textAlign:"center",
-            display:"flex", 
-            alignItems:"center", 
-            justifyContent:"center",
-            fontSize:"2em"
+    const meta = {
+        title:"Psy Info",
+        description:"Psychological infromation here!",
+        canonical:"https://tw-yk.website/psychology",
+        meta:{
+            charset:"utf-8"
         }
-    
+    }
     return ( 
-        <div style = {styleForContainer}> 
+        <div> 
             <div>
-                施工中......
-            {number === 0? <Navigate to = "/" />:number} 秒後重新導向首頁
+                <DocumentMeta {...meta}>
+                <NavBar/>
+                <PsyMainContent/>
+                </DocumentMeta>
             </div>
         </div> );
 }

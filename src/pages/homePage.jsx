@@ -2,19 +2,29 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import NavBar from '../nav/nav';
 import Cover from '../components/cover';
-import Tables from '../components/tables';
+import TableInterface from '../components/tableComponents/tablesInterface';
 import Works from '../components/works';
 import { Link } from "react-router-dom";
 import AuthenticationService from '../api/authenticationService';
 import ManipulateWorks from '../api/manipulateWorks';
 import DocumentMeta from 'react-document-meta';
+import IntroManager from '../components/IntroManager';
+import "../css/cssForMyPic.css";
+import "../css/cssForBackground.css";
+import Intro from '../components/intro';
+import introManager from '../api/introManager';
+import ShootingStar from '../components/shootingStar';
 
 class HomePage extends React.Component {
     state = {
         loginMessage:"Login if you are YK ",
         works:[],
+        intro:"This is my text",
+        statue:"",
         adminUser:"twyk",
-        workKey: 1
+        workKey: 1,
+        updating:false,
+        loading:true
     }
 
     logout = () => {
@@ -32,12 +42,22 @@ class HomePage extends React.Component {
         }
     }
 
+    handleUpdateIntro = () => {
+        this.setState( {updating:true} );
+    }
+
+    handleSubmitIntro = value => {
+        introManager.updateIntro(value.content);
+        this.setState( {updating:false} );
+        setTimeout( () => window.location.reload(), 50);
+    }
+
     componentDidMount() {
         /* 
         First, get the JWT token, 
         then get data from the database
         */
-
+        setTimeout(()=>{}, 50);
         if(AuthenticationService.isUserLoggedIn()) {
             let token = AuthenticationService.createJWTToken(sessionStorage.getItem(this.state.adminUser));
             AuthenticationService.setupAxiosInterceptor(token);
@@ -47,6 +67,14 @@ class HomePage extends React.Component {
                     this.setState({works:response.data});
                 }
             )
+            introManager.getIntro()
+            .then(
+                    response => {
+                        this.setState( {intro:response.data} );
+                    }
+            )
+            this.setState( {loading:false} );
+
         } else {
             AuthenticationService.executeJWTAuthenticationService("guest", "guest")
             .then( response => {
@@ -57,13 +85,19 @@ class HomePage extends React.Component {
                         this.setState({works:response.data});
                     }
                 )
+                introManager.getIntro()
+                .then(
+                    response => {
+                        this.setState( {intro:response.data} );
+                    }
+                )
+                this.setState( {loading:false} );
             } )
         }
     }
 
     render() { 
-        
-        let {works, workKey} = this.state;
+        let {works, workKey, updating, intro, loading} = this.state;
         const hasLoggedIn = AuthenticationService.isUserLoggedIn();
         const styleForContainer = {
             position:"relative",
@@ -76,7 +110,7 @@ class HomePage extends React.Component {
             alignItem:"center",
             textAlign:"center",
             height:"100vh",
-            margin:"auto"
+            marginTop:"3.5em"
         };
 
         const styleForPutInCenter = {
@@ -99,7 +133,14 @@ class HomePage extends React.Component {
             margin:"auto",
             overflowX:"hidden",
             overflowY:"scroll"
-        };
+        }
+
+        const styleForIntro = {
+            position:"relative",
+            textAlign:"center",
+            height:"auto",
+            margin:"auto"
+        }
 
         const styleForLoginButtonPostion = {
             textAlign:"center"
@@ -118,14 +159,18 @@ class HomePage extends React.Component {
             marginLeft:"3vh"
         }
 
+        const styleForIntroContainer = {
+            marginTop:"3em",
+            height:"auto",
+        }
+
         const styleForIcon = {
             marginRight:"1vh"
         }
 
         const meta = {
             title:"Yen-Kuang's web",
-            description:"Hello! this is Yen-Kuang, wellcome to my website!",
-            canonical:"https://tw-yk.website",
+            description:this.state.intro,
             meta:{
                 charset:"utf-8"
             }
@@ -134,20 +179,38 @@ class HomePage extends React.Component {
         return (
             <React.Fragment>
                 <DocumentMeta {...meta}>
-                <NavBar />
+                <NavBar/>
                 <div className = "container-fluid" style = {styleForContainer}>
-                    
-                    <div className = "row" style = {styleForFullCover}>
+
+                    <ShootingStar/>
+
+                    <div className = "row" id = "cover" style = {styleForFullCover}>
                         <Cover />
                     </div>
 
-                    <div className = "row" style = {styleForContainer}>
-                        <div className = "col-sm-4 p-4" style = {styleForPutInCenter}>
-                            <img className = "img-fluid" src = "./myPic.jpeg" alt = "AAA"/>
+                    <div className = "row" id = "picContainer" style={{marginTop:"2em"}}>
+                        <div className = "col-sm-5 p-5" id = "myPicture" style = {styleForPutInCenter}>
+                            <a href="/" className="photo">
+                                <h2 id="myName">YK Chen</h2>
+                                <img className = "img-fluid" id = "yk" src = "./myPic.jpeg" alt = "AAA"/>
+                                <div className="glow-wrap">
+                                    <i className="glow"></i>
+                                </div>
+                            </a>
                         </div >
+                    </div>
 
+                    <div className = "row" style = {styleForIntro}>
+                        <div className="introContainer" id = "introContainer" style = {styleForIntroContainer}>
+                            {updating? <IntroManager handleSubmitIntro = {this.handleSubmitIntro} content = {intro}/>:<Intro content = {intro} loading = {loading}/>}
+                            <div style={{height:"2em"}}></div>
+                            {hasLoggedIn && !updating? <button className='btn btn-primary' onClick={this.handleUpdateIntro}>Update</button>:<></>}
+                        </div>
+                    </div>
+
+                    <div className = "row" style = {styleForContainer}>
                         <div className = "col-sm-8 p-4" style = {styleForPutInCenter}>
-                            <Tables />
+                            <TableInterface />
                         </div >
                     </div>
 
@@ -185,7 +248,7 @@ class HomePage extends React.Component {
 
                             <li className="ms-3" style = {styleForIcon}>
                                 <a className="text-muted" href="https://www.facebook.com/sam.chen.75491/" target = "_blank" rel="noreferrer">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" className="bi bi-facebook" viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#1E90FF" className="bi bi-facebook" viewBox="0 0 16 16">
                                         <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
                                     </svg>
                                 </a>

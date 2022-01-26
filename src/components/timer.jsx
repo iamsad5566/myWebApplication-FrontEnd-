@@ -29,7 +29,9 @@ const Timer = props => {
     position:"relative",
     textAlign:"left",
     height:"auto",
-    width:"100%"
+    width:"100%",
+    zIndex:"-1",
+    padding:"50px"
   }
 
   const styleForFont = {
@@ -41,7 +43,10 @@ const Timer = props => {
     fontStyle:"italic", 
     fontFamily:"Georgia",
     fontSize:"25px",
-    testHeight:"50px"
+    testHeight:"50px",
+    color:"rgb(184, 134, 11)",
+    padding:"50px",
+    zIndex:"3"
   };
 
   var styleForPic = {
@@ -58,11 +63,11 @@ const Timer = props => {
     <React.Fragment>
         <div style = {styleForHide}> 
           {pictureList.map( picture => {
-            return <img key = {keyVal} src = {picture.url} alt="qq"/>
+            return <img key = {keyVal++} src = {picture.url} alt="qq"/>
           } )}
         </div>
-      <div className = "col-sm 8" style = {styleForFormat}>
-          <img className = "img-fluid" src = {pictureList[index].url} alt = "qq" style = {styleForPic} loading = "lazy"/>
+      <div className = "col-sm" style = {styleForFormat}>
+          <img className = "img-fluid" id = "coverPic" src = {pictureList[index].url} alt = "qq" style = {styleForPic}/>
       </div>
 
       <div className = "col-sm-4" style = {styleForFont}>
