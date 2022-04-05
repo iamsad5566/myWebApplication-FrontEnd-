@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import AuthenticationService from '../api/authenticationService';
@@ -12,7 +12,7 @@ var formArray = [];
 var formData = new FormData();
 var index = 0;
 
-const AddPost = () => {
+const Test = () => {
     const [successful, setSuccessful] = useState(false);
     const [unsuccessful, setUnsuccessful] = useState(false);
     const [message, setMessage] = useState("");
@@ -69,7 +69,7 @@ const AddPost = () => {
         let reader = new FileReader();
         if(file !== undefined) {
             reader.readAsDataURL(file);
-            reader.onload = () => {  
+            reader.onload= () => {  
                 let src = reader.result;
                 select(".textarea")
                 .append("text")
@@ -171,7 +171,7 @@ const AddPost = () => {
      );
 }
  
-export default AddPost;
+export default Test;
 
 // class AddPost extends React.Component {
 //     state = {

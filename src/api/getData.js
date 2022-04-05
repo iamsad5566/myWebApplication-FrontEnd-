@@ -8,20 +8,20 @@ class GetData {
         return axios.get( this.serverAddress + "article/getAllArticles" );
     }
 
-    getSingleArticle(id) {
-        return axios.get( this.serverAddress + `article/getSingleArticle/${id}`);
+    getSingleArticle(title) {
+        return axios.get( this.serverAddress + `article/getSingleArticle/${title}`);
     }
 
-    getSinglePicture(title) {
-        return axios.get( this.serverAddress + `article/getSinglePicture/${title}` );
+    getAllPicturesInArticle(title) {
+        return axios.get( this.serverAddress + `article/getAllPicturesInArticle/${title}`)
     }
 
     getBlogBrowse() {
         return axios.get( this.serverAddress + `article/getBlogBrowse` );
     }
 
-    getArticleBrowse(id) {
-        return axios.get( this.serverAddress + `article/getArticleBrowse?id=${id}` );
+    getArticleBrowse(title) {
+        return axios.get( this.serverAddress + `article/getArticleBrowse?title=${title}` );
     }
 }
 

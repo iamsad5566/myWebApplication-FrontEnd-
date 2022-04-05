@@ -5,12 +5,13 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
 import Layout from "./layout";
 
-ReactDOM.render(
-  <React.Fragment>
-    <Layout />
-  </React.Fragment>,
-  document.getElementById('root')
-);
+const rootElement = document.getElementById("root");
+
+if(rootElement.hasChildNodes()) {
+  ReactDOM.hydrate(<Layout />, rootElement)
+} else {
+  ReactDOM.render(<Layout />, rootElement)
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

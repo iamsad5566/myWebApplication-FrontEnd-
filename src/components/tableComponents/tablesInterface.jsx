@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ConTable from './conTable';
 import EmpTable from './empTable';
 import EduTable from './eduTable';
+import PublicationTable from './publicationTable';
 
 const TableInterface = () => {
     const [selection, setSelection] = useState(0);
@@ -13,7 +14,8 @@ const TableInterface = () => {
     const tableArr = [
         <EduTable/>,
         <ConTable/>,
-        <EmpTable/>
+        <EmpTable/>,
+        <PublicationTable/>
     ]
 
     const styleForTables = {
@@ -30,10 +32,11 @@ const TableInterface = () => {
             <table className="table">
             <thead>
                 <tr>
-                <th colspan="3" scope="col">
+                <th colSpan="3" scope="col">
                     <button id = "tableSelect" className='btn btn-primary m-2' onClick={()=>handleSelect(0)}>Education</button>
                     <button id = "tableSelect" className='btn btn-secondary m-2' onClick={()=>handleSelect(1)}>Conferences</button>
                     <button id = "tableSelect" className='btn btn-danger m-2' onClick={()=>handleSelect(2)}>Employments</button>
+                    <button id = "tableSelect" className='btn btn-success m-2' onClick={()=>handleSelect(3)}>Publications</button>
                 </th>
                 </tr>
             </thead>
@@ -41,11 +44,15 @@ const TableInterface = () => {
                 <tr className='table-dark' style={{height:"2em"}}>
                 <th scope="row"></th>
                 </tr>
-                {tableArr[selection]}
+                
             </tbody>
+            
             
         </table>
         
+        <div>
+            {tableArr[selection]}
+        </div>
         
         </div>
 

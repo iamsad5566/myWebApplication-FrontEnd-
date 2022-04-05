@@ -1,0 +1,7 @@
+#journalLink {
+  color: rgb(12, 12, 170);
+}
+
+#journalLink:hover {
+  color: rgb(192, 51, 51);
+}

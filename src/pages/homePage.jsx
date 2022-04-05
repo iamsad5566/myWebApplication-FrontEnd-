@@ -7,13 +7,12 @@ import Works from '../components/works';
 import { Link } from "react-router-dom";
 import AuthenticationService from '../api/authenticationService';
 import ManipulateWorks from '../api/manipulateWorks';
-import DocumentMeta from 'react-document-meta';
 import IntroManager from '../components/IntroManager';
 import "../css/cssForMyPic.css";
-import "../css/cssForBackground.css";
 import Intro from '../components/intro';
 import introManager from '../api/introManager';
 import ShootingStar from '../components/shootingStar';
+import HeaderHomePage from '../components/headers/headerHomePage';
 
 class HomePage extends React.Component {
     state = {
@@ -104,20 +103,11 @@ class HomePage extends React.Component {
             top:"1px",
         };
 
-        const styleForFullCover = {
-            position:"relative",
-            display:"flex",
-            alignItem:"center",
-            textAlign:"center",
-            height:"100vh",
-            marginTop:"3.5em"
-        };
-
         const styleForPutInCenter = {
             margin:"auto",
             display:"flex", 
             alignItems:"center", 
-            justifyContent:"center"
+            justifyContent:"center",
         }
 
         const styleForWorks = {
@@ -135,7 +125,13 @@ class HomePage extends React.Component {
             overflowY:"scroll"
         }
 
+        const sytleForPhotoContainer = {
+            width:"100%",
+            height:"100%",
+        }
+
         const styleForIntro = {
+            width:"100%",
             position:"relative",
             textAlign:"center",
             height:"auto",
@@ -143,6 +139,7 @@ class HomePage extends React.Component {
         }
 
         const styleForLoginButtonPostion = {
+            marginTop:"2em",
             textAlign:"center"
         }
 
@@ -168,31 +165,23 @@ class HomePage extends React.Component {
             marginRight:"1vh"
         }
 
-        const meta = {
-            title:"Yen-Kuang's web",
-            description:this.state.intro,
-            meta:{
-                charset:"utf-8"
-            }
-        }
-
         return (
             <React.Fragment>
-                <DocumentMeta {...meta}>
+                <HeaderHomePage/>
                 <NavBar/>
                 <div className = "container-fluid" style = {styleForContainer}>
 
                     <ShootingStar/>
 
-                    <div className = "row" id = "cover" style = {styleForFullCover}>
+                    <div className = "row" id = "cover">
                         <Cover />
                     </div>
 
                     <div className = "row" id = "picContainer" style={{marginTop:"2em"}}>
-                        <div className = "col-sm-5 p-5" id = "myPicture" style = {styleForPutInCenter}>
+                        <div className = "col-sm-5 p-5" style={sytleForPhotoContainer}>
                             <a href="/" className="photo">
                                 <h2 id="myName">YK Chen</h2>
-                                <img className = "img-fluid" id = "yk" src = "./myPic.jpeg" alt = "AAA"/>
+                                <img id = "yk" src = "./myPic.jpeg" alt = "AAA"/>
                                 <div className="glow-wrap">
                                     <i className="glow"></i>
                                 </div>
@@ -232,11 +221,15 @@ class HomePage extends React.Component {
                         <div className="col-md-4 d-flex align-items-center">
                         <a href="/" className="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1">
                             <svg className="bi" width="30" height="30"></svg>
-                            <span className="text-muted"><img src = "gorilla.ico" alt = "qq"/></span>
+                            <span className="text-muted"><img src = "gorilla.jpg" alt = "qq"/></span>
                         </a>
 
                         <a href = "https://leetcode.com/chen3210g/" target="_blank" rel ="noreferrer" style={styleForLeetCodeIcon}>
                             <img src ="https://cdn.iconscout.com/icon/free/png-256/leetcode-3521542-2944960.png" width="50" height="50" alt="NG"/>
+                        </a>
+
+                        <a href = "https://github.com/iamsad5566" target="_blank" rel="noreferrer" style={styleForLeetCodeIcon}>
+                            <img src = "https://github.githubassets.com/apple-touch-icon-60x60.png" width="50" height="50" alt="NG"/>
                         </a>
                         
                         </div>
@@ -264,7 +257,6 @@ class HomePage extends React.Component {
                         </ul>
                     </footer>
                 </div>
-                </DocumentMeta>
         </React.Fragment>);
     }
 }

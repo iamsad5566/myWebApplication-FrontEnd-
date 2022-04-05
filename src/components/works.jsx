@@ -18,9 +18,12 @@ const Works = props => {
         <div>
             <h4 style={styleForWorks}>
                 {id + ". " + title}
-                <a href={url} style={styleForUrl} target="_blank" rel ="noreferrer">
+                <div style = {styleForUrl}></div>
+                <a href={url} target="_blank" rel ="noreferrer">
                     <img src = {iconUrl} alt = "Click me!"/>
-                </a> 
+                </a>
+                
+                <div style = {{display:"block"}}></div>
                 {AuthenticationService.isUserLoggedIn()? <button className='btn btn-danger my-3' onClick = {() => handleDeleteWork(title)}> Delete </button>: <></>}
             </h4>
         </div>

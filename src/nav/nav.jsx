@@ -57,7 +57,7 @@ class NavBar extends React.Component {
                         <ul className="navbar-nav ms-auto py-4 py-lg-0">
                             <li className="nav-item">
                                 <Link className="nav-link px-lg-3 py-3 py-lg-4" to="/blog">myBlog</Link></li>
-                            <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="/psychology" onClick={this.handleRefresh}>心理學專區</Link></li>
+                            <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="/psychology" onClick={this.handleRefresh}>Psy zone</Link></li>
                             <li className="nav-item"><Link className="nav-link px-lg-3 py-3 py-lg-4" to="/testing" onClick={this.handleRefresh}>Testing thought</Link></li>
                         </ul>
                     </div>

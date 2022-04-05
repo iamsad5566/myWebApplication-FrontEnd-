@@ -2,11 +2,12 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 80%;
+  width: 91%;
   height: 100vh;
   background-position-x: center;
   background-size: cover;
-  animation: animateBg 50s linear infinite;
+  animation: animateBg 50s linear;
+  animation-iteration-count: infinite;
   overflow: hidden;
 }
 @keyframes animateBg {
@@ -27,7 +28,8 @@
   border-radius: 50%;
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1),
     0 0 0 8px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 1);
-  animation: animate 3s linear infinite;
+  animation: animate 3s linear;
+  animation-iteration-count: infinite;
 }
 .star::before {
   content: "";

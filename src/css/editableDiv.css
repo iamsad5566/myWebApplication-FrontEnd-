@@ -1,0 +1,15 @@
+.textarea {
+  height: 900px;
+  width: 100%;
+  display: block;
+  padding: 4px;
+  border: 1px solid #888;
+  resize: vertical;
+  overflow: auto;
+  text-align: justify;
+}
+
+.textarea:empty:before {
+  content: attr(placeholder);
+  color: #bbb;
+}

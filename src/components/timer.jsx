@@ -28,13 +28,17 @@ const Timer = props => {
     margin:"auto",
     position:"relative",
     textAlign:"left",
-    height:"auto",
+    height:"100%",
     width:"100%",
     zIndex:"-1",
-    padding:"50px"
+    padding:"50px",
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center",
   }
 
   const styleForFont = {
+    height:"17em",
     display:"flex",
     justifyContent:"center",
     alignItems:"center",

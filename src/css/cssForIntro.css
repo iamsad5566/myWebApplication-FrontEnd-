@@ -2,22 +2,22 @@
   font-weight: 500;
   text-align: justify;
   font-size: 18px;
-  background: linear-gradient(180deg, #000, rgb(255, 239, 98), #000);
+  background: linear-gradient(180deg, #000, rgb(255, 238, 0), #000);
   letter-spacing: 3px;
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: rgba(104, 31, 31, 0.3);
   background-repeat: no-repeat;
   background-size: 100% 65%;
-  animation: shine 15s linear infinite;
+  animation: shine 10s linear infinite;
   position: relative;
 }
 
 @keyframes shine {
   0% {
-    background-position-y: -250%;
+    background-position-y: -200%;
   }
   100% {
-    background-position-y: 250%;
+    background-position-y: 350%;
   }
 }

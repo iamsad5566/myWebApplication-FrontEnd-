@@ -274,7 +274,7 @@ const DrawMap = props => {
                     </div>
                     <div className = "col-sm-6" id = "tw" style={styleForTaiwan}>
                         <svg className = "img-fluid" height = "750" width = "750">
-                            <g stroke = "white" fill = "DarkGreen">
+                            <g stroke = "white" id = "twMap" fill = "DarkGreen">
                                 {
                                     Features.map( feature => {
                                         return <MapControl key = {county++} feature = {feature} addSelected={addSelected} deleteSelected={deleteSelected}/>
