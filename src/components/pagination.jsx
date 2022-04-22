@@ -10,8 +10,8 @@ const Pagination = props => {
     const pages = _.range(1, pagesCount+1);
 
     return ( 
-        <div>
-            <nav aria-label="Page navigation example">
+        <div style={{textAlign:"center"}}>
+            <nav aria-label="Page navigation example" style={{display:"inline-block"}}>
                 <ul className="pagination">
                     <li className="page-item">
                         <button className="page-link" aria-label="Previous" onClick={() => handlePageMinus(currentPage)}>
@@ -26,6 +26,7 @@ const Pagination = props => {
                     </li>
                 </ul>
             </nav>
+
         </div>
     );
 }

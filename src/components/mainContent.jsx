@@ -41,7 +41,7 @@ class MainContent extends React.Component {
                     <div className="row gx-4 gx-lg-5 justify-content-center">
                         <div className="col-md-10 col-lg-8 col-xl-7">
                                 {AuthenticationService.isUserLoggedIn()? <Link to = "add" className = "btn btn-primary" style={{marginBottom:"3em"}}>New Post</Link>:<></>}
-                                {articles.map( article => (<Article key={id++} title={article.title} content={article.content.length > 80? article.content.substring(0, 110):article.content} date = {article.date}/>) )}
+                                {articles.map( article => (<Article key={id++} postId={article.postId} title={article.title} content={article.content.length > 80? article.content.substring(0, 110):article.content} date = {article.date}/>) )}
                             
                                 <Pagination 
                                 currentPage = {currentPage}

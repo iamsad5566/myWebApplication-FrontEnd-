@@ -1,11 +1,15 @@
 import axios from "axios";
 
 class GetPsyData {
-    serverAddress = "https://tw-yk.website:8443/";
+    serverAddress = "https://tw-yk.website:81/";
     testAddress = "http://localhost:8080/";
 
-    getTotalNumbers() {
-        return axios.get( this.serverAddress + "getTotalNumbers" );
+    getList() {
+        return axios.get( this.serverAddress + "getList" );
+    }
+
+    getDataMap(link) {
+        return axios.post( this.serverAddress + "getDataMap" , {"link":link});
     }
 
     getTotalNumbersEachCounty(county) {

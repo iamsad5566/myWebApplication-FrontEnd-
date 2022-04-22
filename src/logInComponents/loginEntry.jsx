@@ -50,16 +50,9 @@ class LoginInterface extends React.Component {
         }
 
         const styleForLoginButton = {
-            display:"block",
+            display:"inline-block",
             position:"relative",
-            marginRight:"2vh", 
-            marginTop:"1vh"
-        }
-
-        const styleForGoBackButton = {
-            marginTop:"40vh", 
-            marginRight:"10vh", 
-            textAlign:"right"
+            marginTop:"1em"
         }
 
         return (
@@ -67,13 +60,14 @@ class LoginInterface extends React.Component {
             <form>
                 <span> User Name: <input type = "text" name = "username" value = {this.state.username} onChange={this.handleChange} autoComplete="off"/> </span>
                 <span style = {styleForUserPasswordInput}> Password: <input type = "text" name = "password" value = {this.state.password} onChange={this.handleChange} autoComplete="off"/> </span>
-                <span style = {styleForLoginButton}> <button className= "btn btn-warning" type = "submit" onClick={this.loginClicked}>Login</button> </span>
+                <span> <Link to="/" className = "btn btn-danger m-2" style={{borderRadius:"50%"}}> back </Link> </span>
+                <span style = {styleForLoginButton}> <button className= "btn btn-warning m-2" type = "submit" onClick={this.loginClicked} style={{borderRadius:"50%"}}>Login</button> </span>
+                
             </form>
             {this.state.hasLoginFailed && <div className="alert alert-danger"> Invalid credential! </div>}
             {this.state.showSuccessMessage && <div className="alert alert-success"> Welcome back, Yen-Kuang! You can manage your website {<Link to = {"/"}> here </Link>} </div>}
-            <div style = {styleForGoBackButton}>
-                <Link to="/" className = "btn btn-danger"> go back </Link>
-            </div>
+            <div style={{marginTop:"5em"}}> </div>
+                
         </div>);
     }
 }

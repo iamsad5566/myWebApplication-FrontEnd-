@@ -9,6 +9,7 @@ import AuthenticationService from '../api/authenticationService';
 import ManipulateWorks from '../api/manipulateWorks';
 import IntroManager from '../components/IntroManager';
 import "../css/cssForMyPic.css";
+import "../css/scrollHidden.css";
 import Intro from '../components/intro';
 import introManager from '../api/introManager';
 import ShootingStar from '../components/shootingStar';
@@ -48,7 +49,7 @@ class HomePage extends React.Component {
     handleSubmitIntro = value => {
         introManager.updateIntro(value.content);
         this.setState( {updating:false} );
-        setTimeout( () => window.location.reload(), 50);
+        setTimeout( () => window.location.reload(), 200);
     }
 
     componentDidMount() {
@@ -121,7 +122,7 @@ class HomePage extends React.Component {
             textAlign:"center",
             height:"100vh",
             margin:"auto",
-            overflowX:"hidden",
+            overflowX:"scroll",
             overflowY:"scroll"
         }
 
@@ -203,7 +204,7 @@ class HomePage extends React.Component {
                         </div >
                     </div>
 
-                    <div className = "row" style = {styleForWorkFullCover}>
+                    <div className = "row" id = "worksContainer" style = {styleForWorkFullCover}>
                         <div style = {styleForWorks}> 
                             <h1>My works</h1>
                             {!hasLoggedIn? <></>:<Link to = "/addWork" className='btn btn-primary'> Add work </Link>}
@@ -214,7 +215,7 @@ class HomePage extends React.Component {
                     </div>
 
                     <div className = "row" style = {styleForLoginButtonPostion}>
-                        <div> {!hasLoggedIn? <Link to="/login" className = "btn btn-primary"> {this.state.loginMessage} </Link> : <Link to="/" className = "btn btn-warning" onClick={this.logout}> Logout </Link>} </div>
+                        <div> {!hasLoggedIn? <Link to="/login" className = "btn btn-primary" style={{borderRadius:"5% 30% 5% 30%"}}> {this.state.loginMessage} </Link> : <Link to="/" className = "btn btn-warning" onClick={this.logout}> Logout </Link>} </div>
                     </div>
 
                     <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">

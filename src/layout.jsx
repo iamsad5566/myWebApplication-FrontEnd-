@@ -16,6 +16,8 @@ import {HelmetProvider} from "react-helmet-async";
 import Redirect from './pages/redirect';
 import PostmanRegister from './components/postman/postmanRegister';
 import PostmanInterface from './components/postman/postmanInterface';
+import ExpInterface from './components/psyPageComponents/emotionAndMemory/expInterface';
+import Big5Entry from './components/psyPageComponents/questionnaire/big5/big5Entry';
 
 
 class Layout extends React.Component {
@@ -29,16 +31,18 @@ class Layout extends React.Component {
                         <Route path= "/" element = {<HomePage/>}/>
                         <Route path = "login" element = {<LoginInterface/>}/>
 
-                        <Route path = "/blog" element = {<BlogIndex/>}>
-                            <Route index element = {<BlogInterface/>}/>
-                            <Route path = "add" element = {<AuthenticatedPost/>}/>
-                            <Route path= ":title" element = {<Post/>}/>
-                            <Route path = "update" element = {<AuthenticatedUpdate/>}/>
-                            <Route path = "*" element = {<Redirect/>}/>
+                        <Route path = "blog" element = {<BlogIndex/>}>
+                            <Route path="" element = {<BlogInterface/>}/>
+                            <Route path="add" element = {<AuthenticatedPost/>}/>
+                            <Route path=":title" element = {<Post/>}/>
+                            <Route path="update" element = {<AuthenticatedUpdate/>}/>
+                            <Route path="*" element = {<Redirect/>}/>
                         </Route>
                         
                         <Route path = "psychology" element = {<Psychology/>}/>
                         <Route path = "psychology/counsellingPsychologist" element={<CounsellingContainer/>}/>
+                        <Route path = "psychology/emotionAndColor" element={<ExpInterface/>}/>
+                        <Route path = "psychology/questionnaire/big5" element={<Big5Entry/>}/>
 
                         <Route path = "testing" element = {<Testing/>}/>
                         <Route path = "testing/chatRoom" element = {<ChatRoom/>}/>

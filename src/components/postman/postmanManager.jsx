@@ -141,7 +141,7 @@ class PostmanManager extends Component {
                     )
                     
                     .then( () => {
-                        if(this.state.curr === len) {
+                        if(i === len-1) {
                             this.setState({finished:true});
         
                             if(tmpSent.length === 0)

@@ -12,6 +12,13 @@ const TaiwanMap = () => {
             const {COUNTY_MOI_1090820} = topojsonData.objects;
             setData( feature(topojsonData, COUNTY_MOI_1090820) );
         })
+        .catch( () => {
+            json("../../Taiwan.json")
+            .then( topojsonData => {
+                const {COUNTY_MOI_1090820} = topojsonData.objects;
+                setData( feature(topojsonData, COUNTY_MOI_1090820) );
+            } )
+        } )
     }, [])
     
     return ( 

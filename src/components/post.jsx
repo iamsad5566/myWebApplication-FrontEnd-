@@ -6,17 +6,14 @@ import GetData from '../api/getData';
 import HeaderBlogPost from './headers/headerBlogPost';
 
 class Post extends React.Component {
-    url = window.location.href.split("/");
-
     state = {
-        postTitle:this.url[this.url.length-1],
-        postTitle2:this.url[this.url.length-2],
         title: "",
         content: "",
         date: "",
         pictures: [],
         keyValue: 0,
-        adminUser: "twyk"
+        adminUser: "twyk",
+        postId: "",
     }
 
     getArticleAndPic = addressTitle => {
@@ -30,7 +27,7 @@ class Post extends React.Component {
                                 this.setState({title:response.data.title});
                                 this.setState({content:response.data.content});
                                 this.setState({date:response.data.date});
-                                console.log("Successful get post and pictures!")
+                                console.log("Successfully got the post and pictures!")
                             }
                     )
                     .catch("Something wrong!");
@@ -43,9 +40,11 @@ class Post extends React.Component {
     }
 
     componentDidMount() {
-        let addressTitle = this.state.postTitle || this.state.postTitle2;
+        let url = window.location.href.split("/");
+        let addressTitle = url[url.length-1] || url[url.length-2];
+        this.setState({postId:addressTitle});
         if(AuthenticationService.isUserLoggedIn()) {
-            let token = "Bearer " + localStorage.getItem(this.state.adminUser);
+            let token = "Bearer " + sessionStorage.getItem(this.state.adminUser);
             AuthenticationService.setupAxiosInterceptor(token);
             this.getArticleAndPic(addressTitle);
         }
@@ -62,14 +61,14 @@ class Post extends React.Component {
     
     render() { 
         
-        const { title, content, date, pictures, postId} = this.state;
+        const { title, content, date, pictures, postId } = this.state;
         let {keyValue} = this.state;
         let url = "data:image/jpeg;base64,";
         let contentArray = content.split("\n");
         let picIndex = 0;
 
         const styleForBackgroundImage = {
-            backgroundImage:`url("https://tw-yk.website/1.jpeg")`
+            backgroundImage:`url("https://tw-yk.com/1.jpeg")`
         }
 
         const styleForPostInfo = {
@@ -84,7 +83,7 @@ class Post extends React.Component {
 
         return (
             <React.Fragment>
-            <HeaderBlogPost title={title} content={content} id = {postId}/>
+            <HeaderBlogPost title={title} content={content} postId = {postId}/>
             <NavBar/>
             <header className="masthead" style={styleForBackgroundImage}>
                 <div className="container position-relative px-4 px-lg-5">
@@ -124,7 +123,7 @@ class Post extends React.Component {
                                 } )}
                                 
                             <div style={{textAlign:"center"}}>
-                                {AuthenticationService.isUserLoggedIn()? <Link className = "btn btn-success btn" to = {"/blog/update"} onClick = {this.handleReload} state = {{title:title, content:content}} style={styleForUpdateButton}>Update</Link>:<></>}
+                                {AuthenticationService.isUserLoggedIn()? <Link className = "btn btn-success btn" to = {"/blog/update"} onClick = {this.handleReload} state = {{title:title, content:content, postId:postId}} style={styleForUpdateButton}>Update</Link>:<></>}
                             </div>
                         </div>
                         

@@ -6,7 +6,7 @@ import ManipulateData from '../api/manipulateData';
 import GetData from '../api/getData';
 
 const Article = props => {
-    const {title, content, date} = props;
+    const {title, content, date, postId} = props;
     const [articleTodayBrowse, setArticleTodayBrowse] = useState(0);
     const [articleAllBrowse, setArticleAllBrowse] = useState(0);
     const contentArray = content.split("\n");
@@ -15,7 +15,7 @@ const Article = props => {
 
     useEffect(() => {
         if(AuthenticationService.isUserLoggedIn()) {
-            GetData.getArticleBrowse(title)
+            GetData.getArticleBrowse(postId)
             .then(
                 response => {
                     setArticleTodayBrowse(response.data[0]);
@@ -26,9 +26,9 @@ const Article = props => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     } ,[])
     
-    function handleDelete(title) {
+    function handleDelete(postId) {
         if(window.confirm("Are you sure to delete it?")) {
-            ManipulateData.delete(title)
+            ManipulateData.delete(postId)
             .then(setTimeout(() => window.location.reload(), 1000));
         }
     }
@@ -41,7 +41,7 @@ const Article = props => {
         <React.Fragment>
             <div className="post-preview">
 
-                <Link to= {`/blog/${title}`}>
+                <Link to= {`/blog/${postId}`}>
                     <h2 className="post-title">{title}</h2>
                     <h3 className="post-subtitle"><div>{contentArray.map( paragraph => { 
                             if(paragraph.includes("--------------------------------------------------"))
@@ -55,7 +55,7 @@ const Article = props => {
                     <a href="#!">{"  Yen-Kuang  "}</a>
                     on {date}
                 </p>
-                {AuthenticationService.isUserLoggedIn()? <button className = "btn btn-danger btn-sm" style = {styleForDeleteButton} onClick={() => handleDelete(title)} >Delete</button>:<></>}
+                {AuthenticationService.isUserLoggedIn()? <button className = "btn btn-danger btn-sm" style = {styleForDeleteButton} onClick={() => handleDelete(postId)} >Delete</button>:<></>}
                 {AuthenticationService.isUserLoggedIn()? <div> <p> {`今日點擊次數：${articleTodayBrowse}， 總點擊次數：${articleAllBrowse}`}</p> </div>:<></>}
             </div>
             <hr className="my-4" />

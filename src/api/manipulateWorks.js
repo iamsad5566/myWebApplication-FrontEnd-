@@ -1,7 +1,7 @@
 import axios from "axios";
 
 class ManipulateWorks {
-    serverAddress = "https://tw-yk.website:8443/";
+    serverAddress = "https://tw-yk.website:81/";
     testAddress = "http://localhost:8080/";
 
     saveWork(title, url, iconUrl) {

@@ -39,7 +39,6 @@ const AddPost = () => {
 
         let token = "Bearer " + sessionStorage.getItem(adminUser);
         AuthenticationService.setupAxiosInterceptor(token);
-        console.log(token);
         ManipulateData.saveArticle(title, content)
             .then( response => {
                 if(response.status === 200) {
@@ -55,7 +54,10 @@ const AddPost = () => {
                     setMessage("There was something wrong!");
                 }
             )
-
+        
+        setTimeout( ()=>{
+            console.log("Wait for 1s");
+        } ,1000);
         
         if(formArray.length > 0) {
             formData.append("title", title);

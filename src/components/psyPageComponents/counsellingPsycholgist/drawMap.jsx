@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import MapControl from "./mapControl";
 import {select} from "d3";
 
-import DataInput from "./dataInput";
-import GetPsyData from '../../../api/getPsyData';
+import getPsyData from '../../../api/getPsyData';
 import AuthenticationService from '../../../api/authenticationService';
 
 import BarChartPercentage from "./barComponents/barChartPercentage";
@@ -12,16 +11,44 @@ import BarChartPopulation from "./barComponents/barChartPopulation";
 
 const DrawMap = props => {
     let buttonClass = "btn btn-sm m-3";
+    let indexLink = 0;
     document.title = "Information about Taiwanese couselling psychology";
 
     const adminUser = "twyk";
     const [isLoaded, setIsLoaded] = useState(false);
     const [total, setTotal] = useState(0);
-    const [dataMap, setDataMap] = useState([]);
+    const [dataMap, setDataMap] = useState([
+        {county:"新北市", numbers:0},
+        {county:"臺中市", numbers:0},
+        {county:"高雄市", numbers:0},
+        {county:"臺北市", numbers:0},
+        {county:"桃園市", numbers:0},
+        {county:"臺南市", numbers:0},
+        {county:"彰化縣", numbers:0},
+        {county:"屏東縣", numbers:0},
+        {county:"雲林縣", numbers:0},
+        {county:"新竹縣", numbers:0},
+        {county:"苗栗縣", numbers:0},
+        {county:"嘉義縣", numbers:0},
+        {county:"南投縣", numbers:0},
+        {county:"新竹市", numbers:0},
+        {county:"宜蘭縣", numbers:0},
+        {county:"基隆市", numbers:0},
+        {county:"花蓮縣", numbers:0},
+        {county:"嘉義市", numbers:0},
+        {county:"臺東縣", numbers:0},
+        {county:"金門縣", numbers:0},
+        {county:"澎湖縣", numbers:0},
+        {county:"連江縣", numbers:0},
+    ]);
     const [countyNumbersList, setCountyNumbersList] = useState(["心理師公會會員數"]);
     const [countyPercentageList, setCountyPercentageList] = useState(["心理師公會會員百分比人數"])
     const [populationEachCounty, setPopulationEachCounty] = useState(["每萬人之中心理師人數"])
     const [selection, setSelection] = useState([0]);
+
+    const [yearMonthList, setYearMonthList] = useState([]);
+    const [linkOfYearMonth, setLinkOfYearMonth] = useState([]);
+    const [re, setRe] = useState(false);
 
     const populationData = [
         {county:"新北市", population:4008113},
@@ -46,7 +73,7 @@ const DrawMap = props => {
         {county:"金門縣", population:141539},
         {county:"澎湖縣", population:106340},
         {county:"連江縣", population:13645},
-    ]
+    ];
 
     useEffect( () => {
         setTimeout(()=>{}, 100);
@@ -62,33 +89,51 @@ const DrawMap = props => {
         }
 
         setSelection(0);
+        let tmpLink = "";
 
         if(AuthenticationService.isUserLoggedIn()) {
             let token = "Bearer " + sessionStorage.getItem(adminUser);
             AuthenticationService.setupAxiosInterceptor(token);
-            GetPsyData.getTotalNumbers()
-            .then( data => setTotal(data.data) );
-
-            GetPsyData.getNumbersByAllCounty()
-            .then( response => { 
-                setDataMap( response.data );
+            getPsyData.getList()
+            .then( response => {
+                setYearMonthList(response.data["Counties"]);
+                setLinkOfYearMonth(response.data["Links"]);
+                tmpLink = response.data["Links"][0];
+            } )
+            .then( () => {
+                getPsyData.getDataMap(tmpLink)
+                .then( response => {
+                    setDataMap(response.data);
+                    setTotal(response.data[response.data.length-1].numbers);
+                } )
+            } )
+            .then( () => {
                 setIsLoaded(true);
-             })
+            } )
         }
     
         AuthenticationService.executeJWTAuthenticationService("guest", "guest")
         .then( response => {
                     AuthenticationService.registerSuccessfulLogin("guest", response.data.token);
-                    GetPsyData.getTotalNumbers()
-                    .then( data => setTotal(data.data) );
-
-                    GetPsyData.getNumbersByAllCounty()
-                    .then( response => { 
-                        setDataMap( response.data );
+                    getPsyData.getList()
+                    .then( response => {
+                        setYearMonthList(response.data["Counties"]);
+                        setLinkOfYearMonth(response.data["Links"]);
+                        tmpLink = response.data["Links"][0];
+                    } )
+                    .then( () => {
+                        getPsyData.getDataMap(tmpLink)
+                        .then( response => {
+                            setDataMap(response.data);
+                            setTotal(response.data[response.data.length-1].numbers);
+                        } )
+                    } )
+                    .then( () => {
                         setIsLoaded(true);
-                     })
+                    } )
                 }
         );
+        // eslint-disable-next-line
     }, [])
 
     const {features} = props.data;
@@ -210,6 +255,27 @@ const DrawMap = props => {
         setSelection(value);
     }
 
+    const handleChange = event => {
+        setIsLoaded(false)
+        let tmpDataMap = [...dataMap];
+        getPsyData.getDataMap(linkOfYearMonth[event.target.value])
+        .then( response => {
+            setTotal( response.data[response.data.length-1].numbers );
+            tmpDataMap = response.data;
+            setDataMap( tmpDataMap );
+            setCountyPercentageList ( ["心理師公會會員百分比人數"] );
+            setCountyNumbersList( ["心理師公會會員數"] );
+            setPopulationEachCounty( ["每萬人之中心理師人數"] );
+            setCountyList( [] );
+            setRe(true);
+            setIsLoaded(true);
+        } )
+    }
+
+    const handleReset = () => {
+        setRe(false);
+    }
+ 
     const styleForContainer = {
         position:"relative",
         top:"1px",
@@ -240,14 +306,6 @@ const DrawMap = props => {
         marginTop:"3em"
     }
 
-    const styleForInput = {
-        width:"100%",
-        height:"30vh",
-        position: "relative",
-        display:"block",
-        marginTop:"3em"
-    }
-
     let componentArr = [
         <BarChart countyList = {countyList} countyNumbersList = {countyNumbersList}/>, 
         <BarChartPercentage countyList = {countyList} countyPercentageList = {countyPercentageList}/>,
@@ -258,10 +316,16 @@ const DrawMap = props => {
         <React.Fragment>
             <div className = "container-fluid" style = {styleForContainer}>
                 <div className = "row" style = {styleForFullCover}>
-                    <h3>109年全臺諮商心理師執業人數： { isLoaded? 
+                    <h3> <select onChange={handleChange}>
+                            {
+                                yearMonthList.map( ym => {
+                                    return <option value={indexLink++} key={ym}> {ym} </option>;
+                                } )
+                            }
+                        </select>  全臺諮商心理師執業人數： { isLoaded? 
                         total:
-                                <svg id = "loading" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                                <svg id = "loading" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" className="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                                    <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
                                     <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
                                 </svg> } 人
                     </h3>
@@ -277,7 +341,7 @@ const DrawMap = props => {
                             <g stroke = "white" id = "twMap" fill = "DarkGreen">
                                 {
                                     Features.map( feature => {
-                                        return <MapControl key = {county++} feature = {feature} addSelected={addSelected} deleteSelected={deleteSelected}/>
+                                        return <MapControl key = {county++} feature = {feature} addSelected={addSelected} deleteSelected={deleteSelected} re={re} handleReset={handleReset}/>
                                     } )
                                 }
                             </g>
@@ -288,8 +352,6 @@ const DrawMap = props => {
                         {componentArr[selection]}
                     </div>
                 </div>
-
-                { AuthenticationService.isUserLoggedIn()? <div className = "row" style = {styleForInput}><DataInput/></div> : <></>}
                 
             </div>
         </React.Fragment>

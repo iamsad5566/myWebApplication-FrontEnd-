@@ -114,14 +114,16 @@ const UpdatePost = () => {
 
     useEffect( () => {
         let stringArr = content.split("\n");
-        
+        let {postId} = location.state;
         let token = "Bearer " + sessionStorage.getItem(adminUser);
         AuthenticationService.setupAxiosInterceptor(token);
-        getData.getAllPicturesInArticle(title)
+        getData.getAllPicturesInArticle(postId)
         .then( response => {
             setPictures(response.data);
             setLoaded(true);
+            
         } )
+        
 
         if(loaded) {    
             for(let i = 0; i < stringArr.length; i++) {

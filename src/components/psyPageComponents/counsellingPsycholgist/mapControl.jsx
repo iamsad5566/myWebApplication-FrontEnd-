@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { geoMercator, geoPath } from 'd3';
 
 const MapControl = props => {
-    const {feature, addSelected, deleteSelected} = props;
+    const {feature, addSelected, deleteSelected, handleReset} = props;
     let county = feature.properties.COUNTYNAME;
     const [selected, setSelected] = useState(false);
-    
+    let {re} = props;
     function handleClick() {
         
         if(selected === false) {
@@ -18,6 +18,14 @@ const MapControl = props => {
             deleteSelected(county);
         }
     }
+
+    useEffect( () => {
+        if(re) {
+            setSelected(false);
+            handleReset();
+        }
+        // eslint-disable-next-line
+    } ,[re])
 
     let projection = geoMercator()
         .center([121,24])

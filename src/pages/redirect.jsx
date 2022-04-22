@@ -22,15 +22,25 @@ const Redirect = () => {
         // eslint-disable-next-line
     ,[])
 
-    const styleForTitle = {
-        marginTop:"10em"
+    const styleForMiddle = {
+        height:"100vh",
+        display:"flex", 
+        alignItems:"center", 
+        justifyContent:"center",
+        textAlign:"center"
     }
 
     return ( 
-        <React.Fragment>
-            <h1 style={styleForTitle}>Redirecting</h1>
-            {counter}
-        </React.Fragment>
+        <div>
+            <div style={styleForMiddle}>
+                <div style={{display:"block",marginBottom:"10em"}}>
+                    <h2 style={{color:"#FF7F50"}}> Cannot browse the page </h2>
+                    <span style={{marginTop:"2em", display:"inline-block", fontWeight:"bold", fontSize:"1.1em"}}> This address is not existed, please make sure if there's any type error. </span>
+                    <div></div>
+                    <span style={{marginTop:"2em", display:"inline-block", fontWeight:"bold", fontSize:"1.1em", color:"#00008B"}}> Redirecting to the home page: {counter}s </span>
+                </div>
+            </div>
+        </div>
      );
 }
  

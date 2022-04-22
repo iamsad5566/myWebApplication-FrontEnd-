@@ -43,9 +43,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "directly-upload": "scp -r ./build/* root@128.199.249.186:/var/www/tw-yk.website/html",
-    "deploy-product": "react-scripts build && scp -r ./build/* root@128.199.249.186:/var/www/tw-yk.website/html",
-    "deploy-pre-render": "react-scripts build && react-snap && scp -r ./build/* root@128.199.249.186:/var/www/tw-yk.website/html",
+    "directly-upload": "scp -r ./build root@128.199.200.209:~",
+    "deploy-product": "react-scripts build && scp -r ./build root@128.199.200.209:~",
+    "deploy-pre-render": "react-scripts build && react-snap && scp -r ./build root@128.199.200.209:~",
     "postbuild": "react-snap"
   },
   "eslintConfig": {

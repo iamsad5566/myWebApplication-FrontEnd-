@@ -2,7 +2,7 @@ import React from 'react';
 
 const Header = () => {
     const styleForBackgroundImage = {
-        backgroundImage: `url("https://tw-yk.website/background.jpg")`
+        backgroundImage: `url("https://tw-yk.com/background.jpg")`
     }
 
     const styleForHeading = {
