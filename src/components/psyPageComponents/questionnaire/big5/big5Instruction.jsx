@@ -14,6 +14,26 @@ const Big5Instruction = props => {
         justifyContent:"center"
     }
 
+    // const handleMouseUp = () => {
+    //     const selected = window.getSelection().toString();
+    //     console.log(selected);
+    // }
+
+    // const test = () => {
+    //     var span = document.createElement("span");
+    //     span.style.color = "red";
+        
+    //     if(window.getSelection) {
+    //         var sel = window.getSelection()
+    //         if(sel.rangeCount) {
+    //             var range = sel.getRangeAt(0).cloneRange();
+    //             range.surroundContents(span);
+    //             sel.removeAllRanges();
+    //             sel.addRange(range);
+    //         }
+    //     }
+    // }
+
     return ( 
         <React.Fragment>
             <div style={styleForMiddle}>

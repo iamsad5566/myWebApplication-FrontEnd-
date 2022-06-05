@@ -1,225 +1,122 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import ReactMde from 'react-mde';
+import * as Showdown from 'showdown';
+import "react-mde/lib/styles/css/react-mde-all.css";
 import { Link } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import AuthenticationService from '../api/authenticationService';
-import ManipulateData from '../api/manipulateData';
-import getData from '../api/getData';
-import "../css/editableDiv.css";
-import { select } from 'd3';
+import manipulateData from '../api/manipulateData';
+import "../css/post.css";
 
-var indexArray = [];
-var updatedArr = [];
-var formArray = [];
-let formData = new FormData();
-var index = 0;
 
-const UpdatePost = () => {
-    const location = useLocation();
-    let {title, content} = location.state;
+const UpdatePost = props => {
+    let data = useLocation();
+    const [title, setTitle] = useState(data.state.title);
+    let content = data.state.content;
+    let postId = data.state.postId;
+    const [sent, setSent] = useState(false);
     const [successful, setSuccessful] = useState(false);
-    const [unsuccessful, setUnsuccessful] = useState(false);
-    const [pictures, setPictures] = useState([]);
-    const [message, setMessage] = useState("");
-    const [loaded, setLoaded] = useState(false);
-    const [inputValue, setInputValue] = useState("");
-    const adminUser = "twyk";
-    let url = "data:image/jpeg;base64,";
-    
-    const inputArea = useRef(null);
 
-    const handleSubmit = value => {
-        ManipulateData.updatePost(value.title, inputValue)
-            .then( response => {
-                        if(response.status === 202) {
-                            setSuccessful(true);
-                            setMessage("Your post was successful updated!");
-                        } else {
-                            setUnsuccessful(true);
-                            setMessage("There was something wrong!");
-                        }
-                    } 
-            ).catch(
-                () => {
-                    setUnsuccessful(true);
-                    setMessage("There was something wrong!");
-                }
-            )
-        
-        let content = inputValue;
-        let contentArr = content.split("-------------------------------------------------- ");
-        for(let i = 0; i < contentArr.length; i++) {
-            if(contentArr[i].startsWith("IMAGE"))
-                indexArray.push(parseInt(contentArr[i].substring(5, contentArr[i].length)));
-        }
-
-        for(let i = 0; i < indexArray.length; i++) {
-            updatedArr.push(formArray[indexArray[i]]);
-        }
-
-        for(let i = 0; i < updatedArr.length; i++) {
-            formData.append("file", updatedArr[i]);
-        }
-
-        if(formArray.length > 0) {
-            formData.append("title", title);
-            return ManipulateData.updatePicture(formData);
-        }
-    }
 
     const handleChange = event => {
-        let file = event.target.files[0];
-
-        let reader = new FileReader();
-        if(file !== undefined) {
-            let followUp = index;
-            reader.readAsDataURL(file);
-            reader.onload= () => {  
-                console.log(index);
-                let src = reader.result;
-                select(".textarea")
-                .append("text")
-                .text("\n");
-
-                select(".textarea")
-                .append("div")
-                .attr("class", "imageContainer")
-                .attr("id", "update")
-                .attr("style", "text-align:center")
-                .text(`-------------------------------------------------- IMAGE${followUp++} --------------------------------------------------`);
-
-                select("#update")
-                .append("img")
-                .attr("src", src)
-                .attr("style", "width:80%; height:auto; padding:1em");
-                formArray.push(file);
-            };  
-        }
+        setTitle(event.target.value);
     }
 
-    const handleReload = () => {
-        setTimeout(() => {
-            window.location.reload();
-        }, 100)
+
+    function loadSuggestions(text) {
+        return new Promise((accept, reject) => {
+          setTimeout(() => {
+            const suggestions = [
+              {
+                preview: "Andre",
+                value: "@andre"
+              },
+              {
+                preview: "Angela",
+                value: "@angela"
+              },
+              {
+                preview: "David",
+                value: "@david"
+              },
+              {
+                preview: "Louise",
+                value: "@louise"
+              }
+            ].filter(i => i.preview.toLowerCase().includes(text.toLowerCase()));
+            accept(suggestions);
+          }, 250);
+        });
     }
 
-    function validate(value) {
-        let error = {};
-        if(value.title.length === 0) {
-            error.title = "Please set the title!";
-        }
-        
-        return error;
+    const converter = new Showdown.Converter({
+        tables: true,
+        simplifiedAutoLink: true,
+        strikethrough: true,
+        tasklists: true
+    });
+
+    const handleSubmit = () => {
+      manipulateData.updatePost(title, value, postId)
+      .then( response => {
+            setSent(true);
+            setSuccessful(true);
+      } ).catch( error => {
+            setSent(true);
+      } )
     }
 
-    useEffect( () => {
-        let stringArr = content.split("\n");
-        let {postId} = location.state;
-        let token = "Bearer " + sessionStorage.getItem(adminUser);
-        AuthenticationService.setupAxiosInterceptor(token);
-        getData.getAllPicturesInArticle(postId)
-        .then( response => {
-            setPictures(response.data);
-            setLoaded(true);
-            
-        } )
-        
+    const [value, setValue] = React.useState(content);
+    const [selectedTab, setSelectedTab] = React.useState("write");
 
-        if(loaded) {    
-            for(let i = 0; i < stringArr.length; i++) {
-                if(!stringArr[i].includes("IMAGE") && stringArr[i].length > 0) {
-                    select(".textarea")
-                    .append("div")
-                    .text(stringArr[i]+"\n");
-                } else {
-                    if(pictures[index] === undefined) {
-                        console.log("No picture");
-                    } else {
-                        fetch(url+pictures[index].data).then(res => {return res.blob()})
-                        .then(file => {
-                            formArray.push(file);
-                        });
-
-                        select(".textarea")
-                        .append("text")
-                        .text("\n");
-
-                        select(".textarea")
-                        .append("div")
-                        .attr("class", "imageContainer")
-                        .text(`-------------------------------------------------- IMAGE${index} --------------------------------------------------`);
-
-                        select(".textarea")
-                        .append("img")
-                        .attr("src", url+pictures[index++].data)
-                        .attr("style", "width:80%; height:auto; padding:1em");
-                    }
-                }
-            }
-        }
-
-        inputArea.current.addEventListener("input", event => {
-            let string = event.target.innerText;
-            setInputValue(string);
-        })
-
-        inputArea.current.addEventListener("DOMNodeInserted", event => {
-            if(event.target.toString() === "[object HTMLImageElement]") {
-                let string = event.path[2].innerText;
-                setInputValue(string);
-            }
-        })
-
-        // eslint-disable-next-line
-    }, [loaded])
+    const styleForMD = {
+        boxSizing:"border-box",
+        fontSize:"1em",
+        fontFamily:"sans-serif",
+        lineHeight:"1.15",
+        width:"90%",
+        height:"60vh",
+        padding:"10px",
+        display:"inline-block",
+        textAlign:"justify"
+    }
 
     return ( 
         <React.Fragment>
-            <div className="container" style={{textAlign:"center"}}>
-                <Formik initialValues = {{title:title}}
-                onSubmit={handleSubmit}
-                validate={validate} 
-                validateOnBlur={false}
-                validateOnChange={true}          
-                >
+            <div style={{marginTop:"7em"}}></div>
+            <h1 style={{textAlign:"center", margin:"1em", fontFamily:"fantasy", fontSize:"2.5em"}}> <i>Update</i> </h1>
 
-                    {
-                        formProps => (
-                            <Form style = {{textAlign:"center", width:"80%", position:"relative", marginLeft:"3em", marginTop:"5em"}}>
-                                <fieldset className="form-group">
-                                    {successful? <div className = "alert alert-success">{message}</div>:<></>}
-                                    {unsuccessful? <div className = "alert alert-danger">{message}</div>:<></>}
-                                    <ErrorMessage className = "alert alert-warning" name="title" component="div" />
-                                    <h2>{title}</h2>
-                                    <div style={{display:"none"}}>
-                                        <Field className="form-control" name = "title" autoComplete = "off"/>
-                                    </div>
-                                </fieldset>
+            <div style={{textAlign:"center"}}>
+                <label style={{width:"100%", display:"inline-block"}}> <span style={{fontWeight:"bold", fontSize:"1.5em"}}>Title: </span> 
+                    <div></div>
+                    <input value={title} onChange={event => handleChange(event)} style={{width:"50%", height:"2em", padding:"1em", margin:"1em 0em 1em"}}/>
+                </label>
+            </div>
 
-                                <fieldset className="form-group">
-                                    <ErrorMessage className = "alert alert-warning" name="content" component="div" />
-                                    <label>content</label>
-                                    <label htmlFor="file" id = "select" style={{display:"block"}}>
-                                        <input type="file" className="form-control form-control-sm" id="formFileSm" onChange={event => handleChange(event)} />
-                                    </label>
-
-                                    <div className="textarea" ref={inputArea} contentEditable="true" placeholder="This is placeholder" />
-                                    <div style = {{display:"none"}}>
-                                        <Field className="form-control" component = "textarea" name = "content" value = {inputValue} autoComplete = "off" style={{height:"500px"}} />
-                                    </div>
-                                </fieldset>
-
-                                {/* <div className="input-group mb-3"  style = {{marginTop:"2em"}}>
-                                    <input type="file" className="form-control" name="file" onChange={event => formProps.setFieldValue("file", event.target.files[0])}/>
-                                   <label className="input-group-text" form="inputGroupFile02">Upload</label>
-                                </div> */}
-
-                                <Link to = {`../${title}`} onClick={handleReload} className="btn btn-danger mt-3 mx-5" > Go back </Link>
-                                <button className = "btn btn-success mt-3" type = "submit"> Submit </button> 
-                            </Form>
-                        )
-                    }
-                </Formik>
+            <div style={{margin:"1em 0em 5em 0em"}}>
+                <div style={{textAlign:"center"}}>
+                {sent? (successful? <div className="alert alert-success" style = {{margin:"2em"}}> sent! </div>:<div className="alert alert-danger" style = {{margin:"2em"}}> failed! </div>):<></>}
+                    <div className="mdContainer" style = {styleForMD}>
+                        <ReactMde
+                            value={value}
+                            onChange={setValue}
+                            selectedTab={selectedTab}
+                            onTabChange={setSelectedTab}
+                            generateMarkdownPreview={markdown =>
+                            Promise.resolve(converter.makeHtml(markdown))
+                            }
+                            loadSuggestions={loadSuggestions}
+                            childProps={{
+                            writeButton: {
+                                tabIndex: -1
+                            }
+                            }}
+                        />
+                        <div style={{textAlign:"right"}}>
+                        <Link className='btn btn-danger' style={{marginTop:"1em", marginRight:"1em", borderRadius:"50%"}} to="../"> back </Link>
+                        <button type="button" className='btn btn-primary' style={{marginTop:"1em", borderRadius:"50%"}} onClick={handleSubmit}> Post </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </React.Fragment> 
     );

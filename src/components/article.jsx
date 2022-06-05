@@ -4,14 +4,12 @@ import { Link } from 'react-router-dom';
 import AuthenticationService from '../api/authenticationService';
 import ManipulateData from '../api/manipulateData';
 import GetData from '../api/getData';
+import ReactMarkdown from 'react-markdown';
 
 const Article = props => {
     const {title, content, date, postId} = props;
     const [articleTodayBrowse, setArticleTodayBrowse] = useState(0);
     const [articleAllBrowse, setArticleAllBrowse] = useState(0);
-    const contentArray = content.split("\n");
-
-    let subKey = 0;
 
     useEffect(() => {
         if(AuthenticationService.isUserLoggedIn()) {
@@ -24,7 +22,7 @@ const Article = props => {
             )
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    } ,[])
+    } ,[postId])
     
     function handleDelete(postId) {
         if(window.confirm("Are you sure to delete it?")) {
@@ -43,11 +41,11 @@ const Article = props => {
 
                 <Link to= {`/blog/${postId}`}>
                     <h2 className="post-title">{title}</h2>
-                    <h3 className="post-subtitle"><div>{contentArray.map( paragraph => { 
-                            if(paragraph.includes("--------------------------------------------------"))
-                                return <p key = {subKey++}>---IMAGE---</p>;
-                            return <p key = {subKey++}>{paragraph}</p>;
-                        } )}</div></h3>
+                    <h3 className="post-subtitle">
+                        <ReactMarkdown>
+                            {content}
+                        </ReactMarkdown>
+                    </h3>
                 </Link>
                 
                 <p className="post-meta">

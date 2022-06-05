@@ -8,7 +8,7 @@ const Notice = props => {
         <React.Fragment>
             <NavBar/>
             <div style={{marginTop:"7em", textAlign:"center"}}>
-                <h2>Register you Gmail on this website</h2>
+                <h2>Register your Gmail on this website</h2>
                 <p>Before the registration, please note the following points:</p>
                 <span style={{display:"inline-block", textAlign:"justify", width:"66%"}}>
                     <ul>

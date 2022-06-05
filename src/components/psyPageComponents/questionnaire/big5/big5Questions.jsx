@@ -51,7 +51,7 @@ const Big5Questions = () => {
                         questions.map( question => {
                             return (
                                 <div key={index}>
-                                    <div style={{padding:"2em", textAlign:"center", fontSize:"1.1em"}}> <span style={{display:"inline-block", width:"15em", textAlign:"left", marginRight:"15em"}}> {++index}. {" " + question[0]} </span> </div>
+                                    <div style={{padding:"2em", textAlign:"center", fontSize:"1.1em"}}> <span style={{display:"inline-block", width:"15em", textAlign:"left", marginRight:"15em", overflow:"hidden"}}> {++index}. {" " + question[0]} </span> </div>
                                     <div></div>
                                     <span style={{backgroundColor:"#F0F8FF", display:"inline-block", textAlign:"center", width:"90%"}}>
                                         <form>

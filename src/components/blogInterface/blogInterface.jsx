@@ -4,6 +4,8 @@ import Header from '../hearder';
 import AuthenticationService from '../../api/authenticationService';
 import GetData from '../../api/getData';
 import "../../css/loadingIcon.css";
+import categories from '../../utils/categories';
+import Loading from '../Loading';
 
 const BlogInterface = () => {
 
@@ -12,9 +14,16 @@ const BlogInterface = () => {
     const[todayBrowseTimes, setTodayBrowseTimes] = useState(0);
     const[totalBrowseTimes, setTotalBrowseTimes] = useState(0);
     const[isLoading, setIsLoading] = useState(false);
+    const[postCategory, setPostCategory] = useState("All");
+    let key = 0;
+
+    const handleCategory = event => {
+        setIsLoading(false);
+        setPostCategory(event.target.value);
+    }
     
     function getArticle() {
-        GetData.getAllArticles()
+        GetData.getAllArticles(postCategory)
             .then( response => {
                 setData(response.data.reverse());
             }
@@ -24,9 +33,9 @@ const BlogInterface = () => {
                 setTodayBrowseTimes(response.data[0]);
                 setTotalBrowseTimes(response.data[1]);
             })
+        ).then(
+            () => {setIsLoading(true);}
         )
-        
-        setIsLoading(true);
     }
   
     useEffect(() => {
@@ -36,44 +45,51 @@ const BlogInterface = () => {
         if(AuthenticationService.isUserLoggedIn()) {
             let token = "Bearer " + sessionStorage.getItem(adminUser);
             AuthenticationService.setupAxiosInterceptor(token);
-            getArticle();
+            getArticle(postCategory);
         }
 
         else {
             AuthenticationService.executeJWTAuthenticationService("guest", "guest")
                 .then( response => {
                     AuthenticationService.registerSuccessfulLogin("guest", response.data.token);
-                    getArticle();
-                });
+                    getArticle(postCategory);
+                })
+                .catch( error => {
+                    alert("Something wrong, please reload the page!");
+                } )
         }
-    }, []);
+        // eslint-disable-next-line
+    }, [postCategory]);
 
     const styleForBrowseTimes = {
         textAlign:"center"
     }
 
-    const styleForLoading = {
-        height:"40vh", 
-        textAlign:"center", 
-        display:"flex", 
-        alignItems:"center", 
-        justifyContent:"center"
+    const styleForCategory = {
+        margin:"5em",
+        textAlign:"center",
     }
 
     return ( 
         <React.Fragment>
             <div>
                 <Header/>
-                {isLoading? <MainContent data = {data}/>:
-                    <div style = {styleForLoading}>
-                        <svg id = "loading" xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" className="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                            <path fillRule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
-                        </svg>
-                    </div>
+                <div style={styleForCategory}>
+                    <h2 style={{display:"inline", fontSize:"1.5em"}}>Category:</h2>
+                        <select style={{marginLeft:"1em"}} value = {postCategory} onChange={event => handleCategory(event)}>
+                            {categories.all.map( category => {
+                                return <option value={category} key={key++}> {category} </option>;
+                            } )}
+                        </select>
+                </div>
+
+                {isLoading?
+                    <MainContent data = {data}/>:<Loading/>
                 }
+
                 {AuthenticationService.isUserLoggedIn()? <div style={styleForBrowseTimes}> <p>{`今日瀏覽次數：${todayBrowseTimes}， 總瀏覽次數：${totalBrowseTimes}`}</p> </div>:<></>}
             </div>
+            
         </React.Fragment>
     );
 }

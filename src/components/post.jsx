@@ -4,6 +4,8 @@ import NavBar from '../nav/nav';
 import AuthenticationService from '../api/authenticationService';
 import GetData from '../api/getData';
 import HeaderBlogPost from './headers/headerBlogPost';
+import ReactMarkdown from 'react-markdown';
+import "../css/post.css";
 
 class Post extends React.Component {
     state = {
@@ -17,10 +19,6 @@ class Post extends React.Component {
     }
 
     getArticleAndPic = addressTitle => {
-        GetData.getAllPicturesInArticle(addressTitle)
-        .then( response => {
-            this.setState( {pictures:response.data} );
-        } );
 
         GetData.getSingleArticle(addressTitle)
                     .then( response => {
@@ -30,18 +28,20 @@ class Post extends React.Component {
                                 console.log("Successfully got the post and pictures!")
                             }
                     )
-                    .catch("Something wrong!");
-    }
-
-    handleReload = () => {
-        setTimeout(() => {
-            window.location.reload();
-        }, 100)
+                    .catch( error => {
+                        alert("Something wrong, please reload the page!");
+                    } );
     }
 
     componentDidMount() {
         let url = window.location.href.split("/");
-        let addressTitle = url[url.length-1] || url[url.length-2];
+        let index = 0;
+        for(let i = 0; i < url.length; i++) {
+            if(url[i] === "blog")
+                index = i;
+        }
+
+        let addressTitle = url[index+1];
         this.setState({postId:addressTitle});
         if(AuthenticationService.isUserLoggedIn()) {
             let token = "Bearer " + sessionStorage.getItem(this.state.adminUser);
@@ -55,17 +55,21 @@ class Post extends React.Component {
                         AuthenticationService.registerSuccessfulLogin("guest", response.data.token);
                         this.getArticleAndPic(addressTitle)
                     }
-            );
+            )
+            .catch( error => {
+                alert("Something wrong, please reload the page!");
+            } )
         }
     }
     
     render() { 
+        let aList = document.getElementsByTagName("a");
+        for(let i = 0; i < aList.length; i++) {
+            aList[i].setAttribute("target", "_blank");
+            aList[i].setAttribute("rel", "noreferrer");
+        }
         
-        const { title, content, date, pictures, postId } = this.state;
-        let {keyValue} = this.state;
-        let url = "data:image/jpeg;base64,";
-        let contentArray = content.split("\n");
-        let picIndex = 0;
+        const { title, content, date, postId } = this.state;
 
         const styleForBackgroundImage = {
             backgroundImage:`url("https://tw-yk.com/1.jpeg")`
@@ -110,17 +114,8 @@ class Post extends React.Component {
             <article className="mb-4">
                 <div className="container px-4 px-lg-5">
                     <div className="row gx-4 gx-lg-5 justify-content-center">
-                        <div className="col-md-10 col-lg-8 col-xl-7">
-                            {contentArray.map( paragraph => {  
-                                    if(paragraph.includes("-------------------------------------------------- IMAGE") && pictures.length > 0) {
-                                        return (
-                                            <div style={{width:"100%", height:"auto", textAlign:"center"}} key = {keyValue++}>
-                                                <img className = "img-fluid" src = {url+pictures[picIndex++].data} alt="qq"/>
-                                            </div>
-                                        )
-                                    }
-                                    return <p key = {keyValue++}> {paragraph} </p>  
-                                } )}
+                        <div className="col-md-10 col-lg-8 col-xl-10">
+                            <ReactMarkdown>{content}</ReactMarkdown>
                                 
                             <div style={{textAlign:"center"}}>
                                 {AuthenticationService.isUserLoggedIn()? <Link className = "btn btn-success btn" to = {"/blog/update"} onClick = {this.handleReload} state = {{title:title, content:content, postId:postId}} style={styleForUpdateButton}>Update</Link>:<></>}

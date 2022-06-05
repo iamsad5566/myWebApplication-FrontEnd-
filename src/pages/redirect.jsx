@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 var num = 5;
 
 const Redirect = () => {
     const [counter, setCounter] = useState(num);
-    const navigate = useNavigate();
 
     useEffect(
         () => {
@@ -15,7 +13,7 @@ const Redirect = () => {
                     setCounter(num);
                 } else {
                     clearInterval(counting);
-                    return navigate("/");
+                    window.location.assign("https://tw-yk.com");
                 }
             }, 1000)
         }

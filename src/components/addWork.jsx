@@ -17,8 +17,6 @@ class AddWork extends React.Component {
         let url = value.url;
         let iconUrl = value.iconUrl;
 
-        let token = "Bearer " + sessionStorage.getItem(this.state.adminUser);
-        AuthenticationService.setupAxiosInterceptor(token);
         manipulateWorks.saveWork(title, url, iconUrl)
             .then( response => {
                 if(response.status === 200) {
@@ -47,6 +45,10 @@ class AddWork extends React.Component {
         }
         
         return error;
+    }
+
+    componentDidMount() {
+        AuthenticationService.setupAxiosInterceptor(AuthenticationService.createJWTToken(sessionStorage.getItem(this.state.adminUser)))
     }
     
     render() {

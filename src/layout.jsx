@@ -17,7 +17,9 @@ import Redirect from './pages/redirect';
 import PostmanRegister from './components/postman/postmanRegister';
 import PostmanInterface from './components/postman/postmanInterface';
 import ExpInterface from './components/psyPageComponents/emotionAndMemory/expInterface';
+import NewTemplate from './components/postman/newTemplate';
 import Big5Entry from './components/psyPageComponents/questionnaire/big5/big5Entry';
+import StroopEffect from './components/psyPageComponents/stroopEffect/stroopEffect';
 
 
 class Layout extends React.Component {
@@ -28,7 +30,8 @@ class Layout extends React.Component {
             <HelmetProvider>
                 <BrowserRouter>
                     <Routes>
-                        <Route path= "/" element = {<HomePage/>}/>
+                        <Route path = "/" element = {<HomePage/>}/>
+                        <Route path = "addWork" element = {<AuthenticatedAddWork/>}/>
                         <Route path = "login" element = {<LoginInterface/>}/>
 
                         <Route path = "blog" element = {<BlogIndex/>}>
@@ -43,14 +46,14 @@ class Layout extends React.Component {
                         <Route path = "psychology/counsellingPsychologist" element={<CounsellingContainer/>}/>
                         <Route path = "psychology/emotionAndColor" element={<ExpInterface/>}/>
                         <Route path = "psychology/questionnaire/big5" element={<Big5Entry/>}/>
+                        <Route path = "psychology/stroopEffect" element={<StroopEffect/>}/>
 
                         <Route path = "testing" element = {<Testing/>}/>
                         <Route path = "testing/chatRoom" element = {<ChatRoom/>}/>
                         <Route path = "testing/postman" element = {<PostmanInterface/>}/>
                         <Route path = "testing/postman/register" element = {<PostmanRegister/>}/>
+                        <Route path = "testing/postman/add" element = {<NewTemplate/>}/>
 
-                        <Route path = "addWork" element = {<AuthenticatedAddWork/>}/>
-                        <Route path = "*" element = {<Redirect/>}/>
                     </Routes>
                 </BrowserRouter>
             </HelmetProvider>

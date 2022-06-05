@@ -3,6 +3,7 @@ import React from 'react';
 import 'bootstrap';
 import {Link} from "react-router-dom";
 import "../css/styles.css";
+import authenticationService from '../api/authenticationService';
 
 class NavBar extends React.Component {
     componentDidMount() {
@@ -14,10 +15,12 @@ class NavBar extends React.Component {
                     // Scrolling Up
                     if (currentTop > 0 && mainNav.classList.contains('is-fixed')) {
                         mainNav.classList.remove('bg-dark');
-                        mainNav.classList.add('is-visible', 'bg-light');
+                        mainNav.classList.add('is-visible');
+                        mainNav.style.backgroundColor = "#FAEBD7";
                     } else {
                         mainNav.classList.remove('is-visible', 'is-fixed');
-                        mainNav.classList.add("bg-dark")
+                        mainNav.classList.add("bg-dark");
+                        mainNav.style.backgroundColor = "";
                     }
                 } else {
                     
@@ -41,9 +44,20 @@ class NavBar extends React.Component {
         }
 
         loadInEvent();
+
+        if(document.cookie.includes("twyk") && !authenticationService.isUserLoggedIn()) {
+            let cookie = document.cookie.split("=");
+            let account = cookie[0];
+            let password = cookie[1];
+            authenticationService.executeJWTAuthenticationService(account, password)
+            .then( response => {
+                authenticationService.registerSuccessfulLogin(account, response.data.token);
+            } )
+        }
     }
 
     render() {
+
         return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark" id="mainNav">

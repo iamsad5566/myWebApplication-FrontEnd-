@@ -17,7 +17,7 @@ const Works = props => {
     return ( 
         <div>
             <h4 style={styleForWorks}>
-                {id + ". " + title}
+                <span> {id + ". " + title} </span>
                 <div style = {styleForUrl}></div>
                 <a href={url} target="_blank" rel ="noreferrer">
                     <img src = {iconUrl} alt = "Click me!"/>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import authenticationService from '../../api/authenticationService';
 import manipulateData from '../../api/manipulateData';
 
 class PostmanManager extends Component {
@@ -9,6 +8,8 @@ class PostmanManager extends Component {
         nameList:[],
         emailAccount:"",
         subject:"",
+        key:"",
+        wrongKey:false,
         sent:false,
         finished:false,
         allGood:true,
@@ -21,7 +22,7 @@ class PostmanManager extends Component {
         totalNum:0,
         curr:0,
         notSent:[]
-     }
+    }
 
     handleChange = event => {
         this.setState( {[event.target.name]: event.target.value} );
@@ -82,6 +83,17 @@ class PostmanManager extends Component {
 
     handleSubmitForm = event => {
         event.preventDefault();
+        if(this.state.key !== "twykSend") {
+            this.setState({wrongKey:true});
+            return;
+        } else {
+            this.setState({wrongKey:false});
+        }
+        this.setState({curr:0});
+        this.setState({sent:false});
+        this.setState({finished:false});
+
+        
         let data = this.props;
         let tmpNotSent = [];
         let tmpSent = [];
@@ -125,7 +137,7 @@ class PostmanManager extends Component {
                 this.setState({warnSubject:false});
 
                 for(let i = 0; i < len; i++) {
-                    manipulateData.postman(this.state.emailAccount, this.state.subject, this.state.toList[i], this.state.dateList[i], this.state.nameList[i], data.text, data.index)
+                    manipulateData.postman(this.state.emailAccount, this.state.subject, this.state.toList[i], this.state.dateList[i], this.state.nameList[i], data.text)
                     .then(
                         response => {
                             if(response.data === 1) {
@@ -156,20 +168,20 @@ class PostmanManager extends Component {
         
     }
 
-    componentDidMount() {
-        if(authenticationService.isUserLoggedIn()) {
-            let token = authenticationService.createJWTToken(sessionStorage.getItem(this.state.adminUser));
-            authenticationService.setupAxiosInterceptor(token);
-        } else {
-            authenticationService.executeJWTAuthenticationService("guest", "guest")
-            .then( response => {
-                authenticationService.registerSuccessfulLogin("guest", response.data.token);
-            })
-        }
-    }
+    // componentDidMount() {
+    //     if(authenticationService.isUserLoggedIn()) {
+    //         let token = authenticationService.createJWTToken(sessionStorage.getItem(this.state.adminUser));
+    //         authenticationService.setupAxiosInterceptor(token);
+    //     } else {
+    //         authenticationService.executeJWTAuthenticationService("guest", "guest")
+    //         .then( response => {
+    //             authenticationService.registerSuccessfulLogin("guest", response.data.token);
+    //         })
+    //     }
+    // }
 
     render() { 
-        const {emailAccount, subject, sent, curr, totalNum, notSent, finished, allGood, reSent, wrong, registered, warnAccount, warnSubject} = this.state;
+        const {emailAccount, subject, sent, curr, totalNum, notSent, finished, allGood, reSent, wrong, registered, warnAccount, warnSubject, key, wrongKey} = this.state;
         let progression = 100 * (curr/totalNum).toFixed(2);
         let barLen = progression.toString() + "%";
         let errorIndex = 0;
@@ -197,10 +209,21 @@ class PostmanManager extends Component {
                         </label>
                     </span>
 
+                    <div style = {{display:"block", marginTop:"0.5em", marginLeft:"2em"}}>
+                        <label>
+                            Key:　
+                            <input type="password" name = "key" value = {key} onChange = {this.handleChange} autoComplete="off"/>
+                        </label>
+                    </div>
+
                     <div style={{marginTop:"1em"}}>
                         <button type = "submit" className="btn btn-success m-2" style={{borderRadius:"2em"}}> Send </button>
                     </div>
                 </form>
+
+                {wrongKey?
+                    <div className="alert alert-warning" style = {{marginTop:"2em"}}> Wrong key! </div>:<></>
+                }
 
                 {reSent?
                     <p style={{color:"red"}}>Please upload csv file!</p>:<></>
@@ -221,7 +244,7 @@ class PostmanManager extends Component {
                     </React.Fragment>
                     :<></>
                 }
-
+                
                 {sent? 
                     <div className="progress" style={{marginTop:"3em", height:"3em"}}>
                         <div className="progress-bar" role="progressbar" style={{width:barLen, fontSize:"2em"}} aria-valuenow={barLen} aria-valuemin="0" aria-valuemax="100">{barLen}</div>

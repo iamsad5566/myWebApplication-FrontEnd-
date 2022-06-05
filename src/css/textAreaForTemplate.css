@@ -1,0 +1,16 @@
+#templateEditor {
+    display: inline-block;
+    height: 85vh;
+    width: 100%;
+    padding: 4px;
+    border: 1px solid #888;
+    resize: vertical;
+    overflow: auto;
+    text-align: justify;
+}
+
+#templateEditor:empty:before {
+    content: attr(placeholder);
+    color: #bbb;
+  }
+  

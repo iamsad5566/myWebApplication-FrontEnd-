@@ -31,6 +31,7 @@ class HomePage extends React.Component {
         if(window.confirm("Are you sure to logout?")) {
             AuthenticationService.logout();
             alert("Logged out");
+            document.cookie = "twyk=82606kuang;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/";
             this.setState( {loginMessage: "Login if you are YK "} );
         }
     }
@@ -64,7 +65,7 @@ class HomePage extends React.Component {
             ManipulateWorks.getAllWorks()
             .then(
                 response => {
-                    this.setState({works:response.data});
+                    this.setState({works:response.data.reverse()});
                 }
             )
             introManager.getIntro()
@@ -82,7 +83,7 @@ class HomePage extends React.Component {
                 ManipulateWorks.getAllWorks()
                 .then(
                     response => {
-                        this.setState({works:response.data});
+                        this.setState({works:response.data.reverse()});
                     }
                 )
                 introManager.getIntro()
@@ -215,7 +216,7 @@ class HomePage extends React.Component {
                     </div>
 
                     <div className = "row" style = {styleForLoginButtonPostion}>
-                        <div> {!hasLoggedIn? <Link to="/login" className = "btn btn-primary" style={{borderRadius:"5% 30% 5% 30%"}}> {this.state.loginMessage} </Link> : <Link to="/" className = "btn btn-warning" onClick={this.logout}> Logout </Link>} </div>
+                        <div> {!hasLoggedIn? <Link to="/login" className = "btn btn-primary" style={{borderRadius:"5% 30% 5% 30%"}}> {this.state.loginMessage} </Link> : <button type="button" className = "btn btn-warning" onClick={this.logout}> Logout </button>} </div>
                     </div>
 
                     <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
