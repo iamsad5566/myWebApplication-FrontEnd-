@@ -20,6 +20,7 @@ import ExpInterface from './components/psyPageComponents/emotionAndMemory/expInt
 import NewTemplate from './components/postman/newTemplate';
 import Big5Entry from './components/psyPageComponents/questionnaire/big5/big5Entry';
 import StroopEffect from './components/psyPageComponents/stroopEffect/stroopEffect';
+import SelectiveAttentionEntry from './components/psyPageComponents/selectiveAttention/selectiveAttentionEntry';
 
 
 class Layout extends React.Component {
@@ -47,6 +48,7 @@ class Layout extends React.Component {
                         <Route path = "psychology/emotionAndColor" element={<ExpInterface/>}/>
                         <Route path = "psychology/questionnaire/big5" element={<Big5Entry/>}/>
                         <Route path = "psychology/stroopEffect" element={<StroopEffect/>}/>
+                        <Route path = "psychology/selective_attention" element={<SelectiveAttentionEntry/>}></Route>
 
                         <Route path = "testing" element = {<Testing/>}/>
                         <Route path = "testing/chatRoom" element = {<ChatRoom/>}/>

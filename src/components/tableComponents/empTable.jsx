@@ -13,7 +13,12 @@ const EmpTable = () => {
             <table className="table table-danger table-striped">
                 <tbody>
                     <tr>
-                    <th scope="row" style={styleForTh}> 2021 - 2022 </th>
+                    <th scope="row" style={styleForTh}> 2022 - </th>
+                    <td> Backend enginner, research and development, Eupfin Technology Co.,Ltd., New Taipei, Taiwan </td>    
+                    </tr>
+
+                    <tr>
+                    <th scope="row" > 2021 - 2022 </th>
                     <td> Research Assistant, Department of Psychology, National Taiwan University, Taipei, Taiwan </td>
                     </tr>
 
