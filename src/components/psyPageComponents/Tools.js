@@ -14,10 +14,22 @@ class Tools {
             array[i] = output[i];
     }
 
+    randomizeCondition = (array, target) => {
+        let randomIndex = Math.floor(array.length * Math.random());
+        let targetIndex = array.indexOf(target);
+
+        while(targetIndex === randomIndex) {
+            randomIndex = Math.floor(array.length * Math.random());
+        }
+        let tmp = array[randomIndex];
+        array[randomIndex] = target;
+        array[targetIndex] = tmp;
+    } 
+
     randomSelect = num => {
         let newNum = Math.ceil(num * Math.random());
         return newNum;
-    } 
+    }
 }
 
 export default new Tools();

@@ -16,15 +16,6 @@ class ManipulateData {
         return axios.put( this.serverAddress + "article/updateArticle", {"title":title, "content":content, "postId":postId} );
     }
 
-    uploadPicture(file) {
-        return axios.post( this.serverAddress + "article/uploadPicture", file, {headers:{"Content-type":"multipart/form-data"}} );
-    }
-
-    updatePicture(file) {
-        return axios.put( this.serverAddress + "article/updatePictures", file, {headers:{"content-type":"multipart/form-data"}} );
-    }
-
-
     postman(account, subject, to, date, subjectName, body) {
         return axios.post( this.serverAddress + "sendMail/", {"from":account, "subject":subject, "to":to, "date":date, "name":subjectName, "body":body});
     }

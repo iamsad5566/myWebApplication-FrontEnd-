@@ -2,6 +2,7 @@ import React from 'react';
 import NavBar from '../../../nav/nav';
 import CentralPosition from '../CentralPosition';
 import Instructions from '../Instructions';
+import HeaderSelectiveAttention from "../../headers/headerSelectiveAttention";
 
 const Instruction = props => {
     const instruction = Instructions.selectiveAttention;
@@ -10,6 +11,7 @@ const Instruction = props => {
 
     return ( 
         <React.Fragment>
+            <HeaderSelectiveAttention/>
             <NavBar/>
             <div style={CentralPosition.central}>
                 <div style={{display:"block"}}>

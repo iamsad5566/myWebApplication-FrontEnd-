@@ -5,8 +5,10 @@ class expStimuli {
         ["distraction", "distraction", "distraction", "target"]
     ]
 
+    condition = this.randomArr(this.condition);
+
     male = ["劉德華", "周杰倫", "李小龍", "李榮浩", "王力宏", "胡瓜", "金城武", "阿信", "韓國瑜"]
-    female = ["呂秀蓮", "新垣結衣", "林依晨", "林志玲", "蔡依林", "蔡英文", "鄧紫棋", "陳意涵", "陶晶瑩"]
+    female = ["呂秀蓮", "新垣結衣", "林依晨", "林志玲", "蔡依林", "蔡英文", "戴資穎", "陳意涵", "陶晶瑩"]
 
     stimuli = [
         {target:"劉德華", distraction:this.male.filter(
@@ -135,9 +137,9 @@ class expStimuli {
                 }
             }
         )},
-        {target:"鄧紫棋", distraction:this.female.filter(
+        {target:"戴資穎", distraction:this.female.filter(
             famous => {
-                if(famous === "鄧紫棋") {
+                if(famous === "戴資穎") {
                     return null;
                 } else {
                     return famous;
@@ -187,6 +189,22 @@ class expStimuli {
 
         for(let i = 0; i < len; i++)
             array[i] = output[i];
+    }
+
+    randomArr(array) {
+        let len = array.length;
+        let output = [];
+
+        while(output.length !== len) {
+            let index = Math.floor(len * Math.random());
+            if(!output.includes(array[index]))
+                output.push(array[index]);
+        }
+
+        for(let i = 0; i < len; i++)
+            array[i] = output[i];
+
+        return output;
     }
 
 }

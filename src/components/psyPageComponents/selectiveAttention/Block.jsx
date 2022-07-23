@@ -4,6 +4,7 @@ import Tools from '../Tools';
 import expStimuli from './expStimuli';
 
 const Block = props => {
+    const trialNum = props.trialNum;
     const prefix = "/SelectiveAttention/";
     const[fixation, setFixation] = useState("");
     const[picture, setPicture] = useState("");
@@ -17,49 +18,82 @@ const Block = props => {
         num:-1,
         display:"none"
     });
-    const[trial, setTrial] = useState(0);
-
-    let condition = [expStimuli.condition].concat([expStimuli.condition]);
-    let level = props.level;
 
     let stimuliList = expStimuli.stimuli;
 
     let memorySet = expStimuli.numberArr;
-    let repetition = 2;
 
-    let storage = [...expStimuli.numberArr];
-    
-    const[listening, setListening] = useState(false);
+    let memoryStorage = arr => {
+        let output = [];
+        for(let i = 0; i < arr.length-1; i++) {
+            output.push(arr[i]);
+        }
 
-    // document.addEventListener('keydown', event => {
-    //     console.log(props.trial);
-    //     console.log(listening);
-    //         if(event.key === "Enter" && listening) {
-    //             handleNextTrial();
-    //             console.log(props.trial);
-    //         }
-    //     }
-    // );
+        return output;
+    }
+
+    let condition = [];
+    for(let i = 0; i < (trialNum/3); i++) {
+        condition = condition.concat([...expStimuli.condition]);
+    }
 
     useEffect( () => {
+        const picArr = [...expStimuli.female].concat([...expStimuli.male]);
+        picArr.forEach( img => {
+            const newImg = new Image();
+            newImg.src = "/SelectiveAttention/" + img + ".png";
+            window[img] = newImg;
+        })
+
+        // Initialize
+        let listening = false;
+        let trial = props.currTrial;
+        let handleNextTrial = props.handleNextTrial;
+        let handleNextRound = props.handleNextRound;
+
         // Randomised
-        expStimuli.randomShuffle(stimuliList);
-        setListening(false);
+        Tools.randomShuffle(stimuliList);
+        Tools.randomizeCondition(condition[trial], "target");
+        if(props.level === "hard") {
+            Tools.randomShuffle(memorySet);
+        }
+        let storage = memoryStorage(memorySet);
+
+        // Event listener
+        const handlePress = event => {
+            if(listening && (event.key === "1" || event.key ==="2" || event.key ==="3" || event.key === "4" || event.key === "0")) {
+                if (trial < trialNum-1)
+                    handleNextTrial();
+                else
+                    handleNextRound();
+            }
+        }
+        
+        window.addEventListener("keypress", handlePress);
+        let removeEvent = () => {
+            window.removeEventListener("keypress", handlePress);
+        }
+
 
         if(trial % 4 === 0) {
-            expStimuli.randomShuffle(storage);
+            Tools.randomShuffle(storage);
         }
         
         if(trial === 0) {
             setFixation("Round " + props.currIndex);
+            
         }
         
         let milliSec = 0;
         // Round count down
-        milliSec += 3000;
-        let countDown = setTimeout( () => {
-            setFixation("");
-        }, milliSec)
+        let countDown = () => {};
+        
+        if(trial === 0) {
+            milliSec += 3000;
+            countDown = setTimeout( () => {
+                setFixation("");
+            }, milliSec);
+        }
         
         // Start
         // Fixation
@@ -90,21 +124,20 @@ const Block = props => {
 
         // Show up images
         milliSec += 850;
-        expStimuli.randomShuffle(condition[trial]);
 
         switch(condition[trial].length) {
             case 2:
                 countDown = setTimeout( () => {
                     let name = ""
                     if(condition[trial][0] === "distraction") {
-                        let arr = stimuliList[stimIndex].distraction;
+                        let arr = stimuliList[(stimIndex)%stimuliList.length].distraction;
                         name = arr[Tools.randomSelect(arr.length)];
                     } else {
-                        name = stimuliList[stimIndex].target;
+                        name = stimuliList[(stimIndex)%stimuliList.length].target;
                     }
 
                     setText(name);
-                    setPicture(prefix + stimuliList[stimIndex].target + ".jpeg");
+                    setPicture(prefix + stimuliList[(stimIndex)%stimuliList.length].target + ".png");
                     setFixation("");
                     setSwitcher({
                         memorySet:"none",
@@ -129,14 +162,14 @@ const Block = props => {
                 countDown = setTimeout( () => {
                     let name = ""
                     if(condition[trial][1] === "distraction") {
-                        let arr = stimuliList[stimIndex+1].distraction;
+                        let arr = stimuliList[(stimIndex+1)%stimuliList.length].distraction;
                         name = arr[Tools.randomSelect(arr.length)];
                     } else {
-                        name = stimuliList[stimIndex+1].target;
+                        name = stimuliList[(stimIndex+1)%stimuliList.length].target;
                     }
 
                     setText(name);
-                    setPicture(prefix + stimuliList[stimIndex+1].target + ".jpeg");
+                    setPicture(prefix + stimuliList[(stimIndex+1)%stimuliList.length].target + ".png");
                     setFixation("");
                     setSwitcher({
                         memorySet:"none",
@@ -161,14 +194,14 @@ const Block = props => {
                 countDown = setTimeout( () => {
                     let name = ""
                     if(condition[trial][0] === "distraction") {
-                        let arr = stimuliList[stimIndex].distraction;
+                        let arr = stimuliList[(stimIndex)%stimuliList.length].distraction;
                         name = arr[Tools.randomSelect(arr.length)];
                     } else {
-                        name = stimuliList[stimIndex].target;
+                        name = stimuliList[(stimIndex)%stimuliList.length].target;
                     }
 
                     setText(name);
-                    setPicture(prefix + stimuliList[stimIndex].target + ".jpeg");
+                    setPicture(prefix + stimuliList[(stimIndex)%stimuliList.length].target + ".png");
                     setFixation("");
                     setSwitcher({
                         memorySet:"none",
@@ -193,14 +226,14 @@ const Block = props => {
                 countDown = setTimeout( () => {
                     let name = ""
                     if(condition[trial][1] === "distraction") {
-                        let arr = stimuliList[stimIndex+1].distraction;
+                        let arr = stimuliList[(stimIndex+1)%stimuliList.length].distraction;
                         name = arr[Tools.randomSelect(arr.length)];
                     } else {
-                        name = stimuliList[stimIndex+1].target;
+                        name = stimuliList[(stimIndex+1)%stimuliList.length].target;
                     }
 
                     setText(name);
-                    setPicture(prefix + stimuliList[stimIndex+1].target + ".jpeg");
+                    setPicture(prefix + stimuliList[(stimIndex+1)%stimuliList.length].target + ".png");
                     setFixation("");
                     setSwitcher({
                         memorySet:"none",
@@ -225,14 +258,14 @@ const Block = props => {
                 countDown = setTimeout( () => {
                     let name = ""
                     if(condition[trial][2] === "distraction") {
-                        let arr = stimuliList[stimIndex+2].distraction;
+                        let arr = stimuliList[(stimIndex+2)%stimuliList.length].distraction;
                         name = arr[Tools.randomSelect(arr.length)];
                     } else {
-                        name = stimuliList[stimIndex+2].target;
+                        name = stimuliList[(stimIndex+2)%stimuliList.length].target;
                     }
 
                     setText(name);
-                    setPicture(prefix + stimuliList[stimIndex+2].target + ".jpeg");
+                    setPicture(prefix + stimuliList[(stimIndex+2)%stimuliList.length].target + ".png");
                     setFixation("");
                     setSwitcher({
                         memorySet:"none",
@@ -257,14 +290,14 @@ const Block = props => {
                 countDown = setTimeout( () => {
                     let name = ""
                     if(condition[trial][0] === "distraction") {
-                        let arr = stimuliList[stimIndex].distraction;
+                        let arr = stimuliList[(stimIndex)%stimuliList.length].distraction;
                         name = arr[Tools.randomSelect(arr.length)];
                     } else {
-                        name = stimuliList[stimIndex].target;
+                        name = stimuliList[(stimIndex)%stimuliList.length].target;
                     }
 
                     setText(name);
-                    setPicture(prefix + stimuliList[stimIndex].target + ".jpeg");
+                    setPicture(prefix + stimuliList[(stimIndex)%stimuliList.length].target + ".png");
                     setFixation("");
                     setSwitcher({
                         memorySet:"none",
@@ -289,14 +322,14 @@ const Block = props => {
                 countDown = setTimeout( () => {
                     let name = ""
                     if(condition[trial][1] === "distraction") {
-                        let arr = stimuliList[stimIndex+1].distraction
+                        let arr = stimuliList[(stimIndex+1)%stimuliList.length].distraction
                         name = arr[Tools.randomSelect(arr.length)];
                     } else {
-                        name = stimuliList[stimIndex+1].target;
+                        name = stimuliList[(stimIndex+1)%stimuliList.length].target;
                     }
 
                     setText(name);
-                    setPicture(prefix + stimuliList[stimIndex+1].target + ".jpeg");
+                    setPicture(prefix + stimuliList[(stimIndex+1)%stimuliList.length].target + ".png");
                     setFixation("");
                     setSwitcher({
                         memorySet:"none",
@@ -321,14 +354,14 @@ const Block = props => {
                 countDown = setTimeout( () => {
                     let name = ""
                     if(condition[trial][2] === "distraction") {
-                        let arr = stimuliList[stimIndex+2].distraction;
+                        let arr = stimuliList[(stimIndex+2)%stimuliList.length].distraction;
                         name = arr[Tools.randomSelect(arr.length)];
                     } else {
-                        name = stimuliList[stimIndex+2].target;
+                        name = stimuliList[(stimIndex+2)%stimuliList.length].target;
                     }
 
                     setText(name);
-                    setPicture(prefix + stimuliList[stimIndex+2].target + ".jpeg");
+                    setPicture(prefix + stimuliList[(stimIndex+2)%stimuliList.length].target + ".png");
                     setFixation("");
                     setSwitcher({
                         memorySet:"none",
@@ -353,14 +386,14 @@ const Block = props => {
                 countDown = setTimeout( () => {
                     let name = ""
                     if(condition[trial][3] === "distraction") {
-                        let arr = stimuliList[stimIndex+3].distraction;
+                        let arr = stimuliList[(stimIndex+3)%stimuliList.length].distraction;
                         name = arr[Tools.randomSelect(arr.length)];
                     } else {
-                        name = stimuliList[stimIndex+3].target;
+                        name = stimuliList[(stimIndex+3)%stimuliList.length].target;
                     }
 
                     setText(name);
-                    setPicture(prefix + stimuliList[stimIndex+3].target + ".jpeg");
+                    setPicture(prefix + stimuliList[(stimIndex+3)%stimuliList.length].target + ".png");
                     setFixation("");
                     setSwitcher({
                         memorySet:"none",
@@ -381,7 +414,8 @@ const Block = props => {
                 }, milliSec);
                 break;
 
-            
+            default:
+                break;
         }
 
         // Wait for response and present probe
@@ -392,7 +426,7 @@ const Block = props => {
                 picture:"none"
             })
             setProbe({
-                num:storage[trial],
+                num:storage[trial%(storage.length)],
                 display:""
             })
         }, milliSec)
@@ -404,21 +438,16 @@ const Block = props => {
                 num:-1,
                 display:"none"
             })
-        }, milliSec)
-
-        // Wait 3000ms
-        milliSec += 3000;
-        countDown = setTimeout( () => {
-            console.log("Next");
-            setTrial(trial => trial+1);
-        }, milliSec)
+            listening = true;
+        }, milliSec);      
         
         return () => {
             clearTimeout(countDown);
+            removeEvent();
         }
 
     // eslint-disable-next-line
-    } ,[trial])
+    } ,[props.currTrial])
 
     const styleForCenter = CentralPosition.central;
     return ( 
