@@ -46,6 +46,19 @@ const PsyMainContent = () => {
                 </div>
             </div>
 
+            <div style={{marginTop:"5em", textAlign:"center"}}>
+                <div className="container px-4 px-lg-5">
+                    <div className="row gx-4 gx-lg-5 justify-content-center">
+                        <div className="col-md-10 col-lg-8 col-xl-7">
+                            <Link to = "selective_attention">
+                                <h2>-- Selective attentition --</h2>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
             <div style={{marginTop:"16vh", textAlign:"center", display:"none"}}>
                 <div className="container px-4 px-lg-5">
                     <div className="row gx-4 gx-lg-5 justify-content-center">

@@ -10,11 +10,11 @@ import Loading from '../Loading';
 const BlogInterface = () => {
 
     const adminUser = "twyk";
-    const[data, setData] = useState([]);
     const[todayBrowseTimes, setTodayBrowseTimes] = useState(0);
     const[totalBrowseTimes, setTotalBrowseTimes] = useState(0);
     const[isLoading, setIsLoading] = useState(false);
     const[postCategory, setPostCategory] = useState("All");
+    const[rowsForEachCategory, setRowsForEachCategory] = useState(0);
     let key = 0;
 
     const handleCategory = event => {
@@ -22,10 +22,10 @@ const BlogInterface = () => {
         setPostCategory(event.target.value);
     }
     
-    function getArticle() {
-        GetData.getAllArticles(postCategory)
+    function getRows() {
+        GetData.getRowsByCategory(postCategory)
             .then( response => {
-                setData(response.data.reverse());
+                setRowsForEachCategory(response.data);
             }
         ).then(
             GetData.getBlogBrowse()
@@ -39,20 +39,15 @@ const BlogInterface = () => {
     }
   
     useEffect(() => {
-
-        setTimeout(()=>{}, 50);
-
         if(AuthenticationService.isUserLoggedIn()) {
             let token = "Bearer " + sessionStorage.getItem(adminUser);
             AuthenticationService.setupAxiosInterceptor(token);
-            getArticle(postCategory);
-        }
-
-        else {
+            getRows();
+        } else {
             AuthenticationService.executeJWTAuthenticationService("guest", "guest")
                 .then( response => {
                     AuthenticationService.registerSuccessfulLogin("guest", response.data.token);
-                    getArticle(postCategory);
+                    getRows();
                 })
                 .catch( error => {
                     alert("Something wrong, please reload the page!");
@@ -84,7 +79,7 @@ const BlogInterface = () => {
                 </div>
 
                 {isLoading?
-                    <MainContent data = {data}/>:<Loading/>
+                    <MainContent rowsForEachCategory={rowsForEachCategory} category = {postCategory}/>:<Loading/>
                 }
 
                 {AuthenticationService.isUserLoggedIn()? <div style={styleForBrowseTimes}> <p>{`今日瀏覽次數：${todayBrowseTimes}， 總瀏覽次數：${totalBrowseTimes}`}</p> </div>:<></>}

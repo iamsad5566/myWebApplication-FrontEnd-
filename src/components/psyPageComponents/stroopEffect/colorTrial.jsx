@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import stroopStimuli from './stroopStimuli';
 
-let trial = 0
+let trial = 0;
 const ColorTrial = props => {
     let totalTrails = 16;
 
     const [result, setResult] = useState("");
+    const [target, setTarget] = useState("");
     const [question, setQuestion] = useState("藍色");
     const [questionColor, setQuestionColor] = useState("white");
     const [leftOption, setLeftOption] = useState({string:"", color:""});
@@ -14,8 +15,22 @@ const ColorTrial = props => {
     // eslint-disable-next-line
     let listener = document.addEventListener('keydown', event => {
         if(event.key === "ArrowRight" || event.key === "ArrowLeft") {
-            let tmp = trial;
-            setResult(`trial: ${tmp}, response: ${event.key}`);
+            let correction = ""
+            if (event.key === "ArrowLeft" && target === leftOption.color) {
+                correction = "correct"
+            } else {
+                correction = "wrong"
+            }
+            console.log(target)
+            console.log("left: ", leftOption.color)
+            console.log("right: ", rightOption.color)
+            
+            let res = `"contion":"color", "trial":"${trial}", "response":"${event.key}", "correction":"${correction}"`;
+            let tmp = [...result];
+            tmp.push(res);
+            setResult(tmp);
+            console.log(result);
+            setTarget("");
             if(trial === totalTrails) {
                 trial = 0;
                 props.handleMoveToNextBlock();
@@ -39,6 +54,7 @@ const ColorTrial = props => {
 
         setQuestionColor("white");
         setQuestion(`請選擇顏色為『${stimuliList[trial%length].target.string}』的選項`);
+        setTarget(stimuliList[trial&length].target.color);
         setLeftOption({string:"", color:""});
         setRightOption({string:"", color:""});
 
@@ -52,9 +68,10 @@ const ColorTrial = props => {
         }, 2000)
 
         let countStimuli = setTimeout( () => {
+            trial++;
+            console.log(trial);
             setLeftOption(arr[0]);
             setRightOption(arr[1]);
-            trial++;
         }, 3000)
 
         return () => {
@@ -62,7 +79,7 @@ const ColorTrial = props => {
             clearTimeout(gap);
             clearTimeout(countStimuli);
         };
-    } ,[result])
+    } ,[target])
     
     return ( 
         <React.Fragment>
