@@ -8,14 +8,6 @@ class GetData {
         return axios.get( this.serverAddress + `article/getAllArticles/${category}` );
     }
 
-    getRowsByCategory(category) {
-        return axios.get( this.serverAddress + `article/get_rows_by_category/${category}` );
-    }
-
-    getPageContent(offset, pageSize, category) {
-        return axios.post( this.serverAddress + `article/get_page_content`, {"offset":offset, "pageSize":pageSize, "category":category});
-    }
-
     getSingleArticle(postId) {
         return axios.get( this.serverAddress + `article/getSingleArticle/${postId}`);
     }

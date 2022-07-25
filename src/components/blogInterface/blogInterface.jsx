@@ -10,11 +10,11 @@ import Loading from '../Loading';
 const BlogInterface = () => {
 
     const adminUser = "twyk";
+    const[data, setData] = useState([]);
     const[todayBrowseTimes, setTodayBrowseTimes] = useState(0);
     const[totalBrowseTimes, setTotalBrowseTimes] = useState(0);
     const[isLoading, setIsLoading] = useState(false);
     const[postCategory, setPostCategory] = useState("All");
-    const[rowsForEachCategory, setRowsForEachCategory] = useState(0);
     let key = 0;
 
     const handleCategory = event => {
@@ -22,10 +22,10 @@ const BlogInterface = () => {
         setPostCategory(event.target.value);
     }
     
-    function getRows() {
-        GetData.getRowsByCategory(postCategory)
+    function getArticle() {
+        GetData.getAllArticles(postCategory)
             .then( response => {
-                setRowsForEachCategory(response.data);
+                setData(response.data.reverse());
             }
         ).then(
             GetData.getBlogBrowse()
@@ -39,15 +39,20 @@ const BlogInterface = () => {
     }
   
     useEffect(() => {
+
+        setTimeout(()=>{}, 50);
+
         if(AuthenticationService.isUserLoggedIn()) {
             let token = "Bearer " + sessionStorage.getItem(adminUser);
             AuthenticationService.setupAxiosInterceptor(token);
-            getRows();
-        } else {
+            getArticle(postCategory);
+        }
+
+        else {
             AuthenticationService.executeJWTAuthenticationService("guest", "guest")
                 .then( response => {
                     AuthenticationService.registerSuccessfulLogin("guest", response.data.token);
-                    getRows();
+                    getArticle(postCategory);
                 })
                 .catch( error => {
                     alert("Something wrong, please reload the page!");
@@ -79,7 +84,7 @@ const BlogInterface = () => {
                 </div>
 
                 {isLoading?
-                    <MainContent rowsForEachCategory={rowsForEachCategory} category = {postCategory}/>:<Loading/>
+                    <MainContent data = {data}/>:<Loading/>
                 }
 
                 {AuthenticationService.isUserLoggedIn()? <div style={styleForBrowseTimes}> <p>{`今日瀏覽次數：${todayBrowseTimes}， 總瀏覽次數：${totalBrowseTimes}`}</p> </div>:<></>}

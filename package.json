@@ -43,9 +43,6 @@
     "web-vitals": "^1.1.2",
     "ws": "^8.4.2"
   },
-  "overrides": {
-    "autoprefixer": "10.4.5"
-  },
   "scripts": {
     "start": "PORT=45678 react-scripts start",
     "build": "react-scripts build",

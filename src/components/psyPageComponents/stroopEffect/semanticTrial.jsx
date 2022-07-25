@@ -5,7 +5,7 @@ let trial = 0;
 const SemanticTrial = props => {
     let totalTrails = 16;
 
-    const [result, setResult] = useState([]);
+    const [result, setResult] = useState("");
     const [question, setQuestion] = useState("藍色");
     const [questionColor, setQuestionColor] = useState("white");
     const [leftOption, setLeftOption] = useState({string:"", color:""});
@@ -13,24 +13,11 @@ const SemanticTrial = props => {
 
     // eslint-disable-next-line
     let listener = document.addEventListener('keydown', event => {
-        if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
-            let correction = ""
-            if (event.key === "ArrowLeft" && question.includes(leftOption.string)) {
-                correction = "correct"
-            } else {
-                correction = "wrong"
-            }
-            
-            let res = `"contion":"semantic", "trial":"${trial}", "response":"${event.key}", "correction":"${correction}"`;
-            let tmp = [...result];
-            tmp.push(res);
-            setResult(tmp);
-
+        if(event.key === "ArrowRight" || event.key === "ArrowLeft") {
+            let tmp = trial;
+            setResult(`trial: ${tmp}, response: ${event.key}`);
             if(trial === totalTrails) {
                 trial = 0;
-                
-
-                
                 props.handleMoveToNextBlock();
             } 
         }
