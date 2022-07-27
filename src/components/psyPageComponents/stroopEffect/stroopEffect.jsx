@@ -17,13 +17,16 @@ const StroopEffect = () => {
         var tmpInfo = {...information};
         switch (event.target.name) {
             case "nameInput":
-                setInformation({name:event.target.value});
+                tmpInfo.name = event.target.value;
+                setInformation(tmpInfo);
                 return;
             case "ageInput":
-                setInformation({age:event.target.value});
+                tmpInfo.age = event.target.value;
+                setInformation(tmpInfo);
                 return;
             case "sexInput":
-                setInformation({sex:event.target.value});
+                tmpInfo.sex = event.target.value;
+                setInformation(tmpInfo);
                 return;
             default:
                 return;
