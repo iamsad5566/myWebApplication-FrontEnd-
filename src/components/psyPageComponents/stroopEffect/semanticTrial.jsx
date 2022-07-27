@@ -38,6 +38,34 @@ const SemanticTrial = props => {
 
     useEffect( () => {
         let stimuliList = stroopStimuli.colorArray;
+        let listening = false;
+
+        const listener = event => {
+            if (listening && (event.key === "ArrowRight" || event.key === "ArrowLeft")) {
+                let correction = "";
+                if (event.key === "ArrowLeft" && stimuliList[trial%length].target.string === leftOption.color) {
+                    correction = "correct";
+                } else {
+                    correction = "wrong";
+                }
+                let res = `"contion":"color", "trial":"${trial+1}", "response":"${event.key}", "correction":"${correction}"`;
+                let tmp = [...result];
+                tmp.push(res);
+                setResult(tmp);
+                console.log(res);
+                if(trial === totalTrails) {
+                    trial = 0;
+                    handleMoveToNextBlock();
+                }
+            }
+            trial++;
+        }
+        
+        window.addEventListener('keydown', listener);
+
+        const removeEvent = () => {
+            window.removeEventListener('keydown', listener);
+        }
 
         if(trial % 8 === 0) {
             stroopStimuli.randomShuffle(stimuliList);
@@ -67,14 +95,16 @@ const SemanticTrial = props => {
         let countStimuli = setTimeout( () => {
             setLeftOption(arr[0]);
             setRightOption(arr[1]);
-            trial++;
+            listening = true;
         }, 3000)
 
         return () => {
             clearTimeout(countQuestion);
             clearTimeout(gap);
             clearTimeout(countStimuli);
+            removeEvent();
         };
+        // eslint-disable-next-line
     } ,[result])
     
     return ( 
