@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import "../css/cssArticle.css";
 import { Link } from 'react-router-dom';
 import AuthenticationService from '../api/authenticationService';
-import ManipulateData from '../api/manipulateData';
+import ManipulateData from '../api/ManipulateData';
 import GetData from '../api/getData';
 import ReactMarkdown from 'react-markdown';
 

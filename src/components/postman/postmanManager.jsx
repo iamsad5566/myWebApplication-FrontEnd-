@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import manipulateData from '../../api/manipulateData';
+import manipulateData from '../../api/ManipulateData';
 
 class PostmanManager extends Component {
     state = { 

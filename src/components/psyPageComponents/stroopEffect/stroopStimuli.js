@@ -10,6 +10,68 @@ class StroopStimuli {
         {target:{string:"黃", color:"gold"}, interference:{string:"綠", color:"green"}}
     ];
 
+    colorAnswer(question, response) {
+        switch (question) {
+            case "藍":
+                if(response === "blue") {
+                    return "correct";
+                } else {
+                    return "wrong";
+                }
+            case "紅":
+                if(response === "red") {
+                    return "correct";
+                } else {
+                    return "wrong";
+                }
+            case "綠":
+                if(response === "green") {
+                    return "correct";
+                } else {
+                    return "wrong";
+                }
+            case "黃":
+                if(response === "gold") {
+                    return "correct";
+                } else {
+                    return "wrong";
+                }
+            default:
+                return "wrong";
+        }
+    }
+
+    semanticAnswer(question, response) {
+        switch (question) {
+            case "藍":
+                if(response === "藍") {
+                    return "correct";
+                } else {
+                    return "wrong";
+                }
+            case "紅":
+                if(response === "紅") {
+                    return "correct";
+                } else {
+                    return "wrong";
+                }
+            case "綠":
+                if(response === "綠") {
+                    return "correct";
+                } else {
+                    return "wrong";
+                }
+            case "黃":
+                if(response === "黃") {
+                    return "correct";
+                } else {
+                    return "wrong";
+                }
+            default:
+                return "wrong";
+        }
+    }
+
     randomShuffle(array) {
         let len = array.length;
         let output = [];

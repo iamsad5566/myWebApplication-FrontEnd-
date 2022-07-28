@@ -3,7 +3,7 @@ import ReactMde from 'react-mde';
 import * as Showdown from 'showdown';
 import "react-mde/lib/styles/css/react-mde-all.css";
 import { Link } from 'react-router-dom';
-import manipulateData from '../api/manipulateData';
+import manipulateData from '../api/ManipulateData';
 import "../css/post.css";
 
 const MDEditor = props => {

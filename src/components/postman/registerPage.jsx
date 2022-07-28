@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authenticationService from '../../api/authenticationService';
-import manipulateData from '../../api/manipulateData';
+import manipulateData from '../../api/ManipulateData';
 
 var num = 5;
 const RegisterPage = () => {

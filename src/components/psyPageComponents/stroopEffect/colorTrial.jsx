@@ -6,57 +6,62 @@ const ColorTrial = props => {
     let totalTrails = 16;
 
     const [result, setResult] = useState("");
-    const [target, setTarget] = useState("");
     const [question, setQuestion] = useState("藍色");
     const [questionColor, setQuestionColor] = useState("white");
     const [leftOption, setLeftOption] = useState({string:"", color:""});
     const [rightOption, setRightOption] = useState({string:"", color:""});
 
-    // eslint-disable-next-line
-    let listener = document.addEventListener('keydown', event => {
-        if(event.key === "ArrowRight" || event.key === "ArrowLeft") {
-            let correction = ""
-            if (event.key === "ArrowLeft" && target === leftOption.color) {
-                correction = "correct"
-            } else {
-                correction = "wrong"
-            }
-            console.log(target)
-            console.log("left: ", leftOption.color)
-            console.log("right: ", rightOption.color)
-            
-            let res = `"contion":"color", "trial":"${trial}", "response":"${event.key}", "correction":"${correction}"`;
-            let tmp = [...result];
-            tmp.push(res);
-            setResult(tmp);
-            console.log(result);
-            setTarget("");
-            if(trial === totalTrails) {
-                trial = 0;
-                props.handleMoveToNextBlock();
-            } 
-        }
-    });
-
+    const handleMoveToNextBlock = props.handleMoveToNextBlock;
+    
     useEffect( () => {
         let stimuliList = stroopStimuli.colorArray;
+        let listening = false;
+        let counter = 0;
+        let answered = false;
 
+        let length = stimuliList.length;
         if(trial % 8 === 0) {
             stroopStimuli.randomShuffle(stimuliList);
         }
 
-        let length = stimuliList.length;
         const arr = [stimuliList[trial%length].target, stimuliList[trial%length].interference];
-
         if(trial % 2 === 0) {
             stroopStimuli.randomShuffle(arr);
         }
 
+        const listener = event => {
+            if (listening && (event.key === "ArrowRight" || event.key === "ArrowLeft")) {
+                answered = true;
+                let responseKey = "";
+                if(event.key === "ArrowRight") {
+                    responseKey = arr[1].color;
+                } else {
+                    responseKey = arr[0].color;
+                }
+                let correction = stroopStimuli.colorAnswer(stimuliList[trial%length].target.string, responseKey);
+                
+                let res = `"contion":"color", "trial":"${trial+1}", "response":"${event.key}", "correction":"${correction}", "spent":"${counter}s"`;
+                let tmp = [...result];
+                tmp.push(res);
+                setResult(tmp);
+                console.log(res);
+                trial++;
+                if(trial === totalTrails) {
+                    trial = 0;
+                    handleMoveToNextBlock();
+                }
+            }
+        }
+
+        window.addEventListener('keydown', listener);
+
+        const removeEvent = () => {
+            window.removeEventListener('keydown', listener);
+        }
+
         setQuestionColor("white");
         setQuestion(`請選擇顏色為『${stimuliList[trial%length].target.string}』的選項`);
-        setTarget(stimuliList[trial&length].target.color);
-        setLeftOption({string:"", color:""});
-        setRightOption({string:"", color:""});
+        
 
         let countQuestion = setTimeout( () => {
             setQuestionColor("black");
@@ -68,18 +73,27 @@ const ColorTrial = props => {
         }, 2000)
 
         let countStimuli = setTimeout( () => {
-            trial++;
-            console.log(trial);
             setLeftOption(arr[0]);
             setRightOption(arr[1]);
+            listening = true;
+            let clock = setInterval( () => {
+                counter += 0.01;
+                if(answered) {
+                    clearInterval(clock);
+                }
+            } ,10)
         }, 3000)
 
         return () => {
             clearTimeout(countQuestion);
             clearTimeout(gap);
             clearTimeout(countStimuli);
+            removeEvent();
+            setLeftOption({string:"", color:""});
+            setRightOption({string:"", color:""});
         };
-    } ,[target])
+        // eslint-disable-next-line
+    } ,[result])
     
     return ( 
         <React.Fragment>
