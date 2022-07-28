@@ -1,6 +1,6 @@
 import React from 'react';
 import authenticationService from '../../api/authenticationService';
-import manipulateData from '../../api/manipulateData';
+import manipulateData from '../../api/ManipulateData';
 
 const TextHandler = props => {
     let template = "";

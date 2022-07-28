@@ -13,32 +13,44 @@ const ColorTrial = props => {
 
     const handleMoveToNextBlock = props.handleMoveToNextBlock;
     
-
     useEffect( () => {
         let stimuliList = stroopStimuli.colorArray;
         let listening = false;
+        let counter = 0;
+        let answered = false;
+
+        let length = stimuliList.length;
+        if(trial % 8 === 0) {
+            stroopStimuli.randomShuffle(stimuliList);
+        }
+
+        const arr = [stimuliList[trial%length].target, stimuliList[trial%length].interference];
+        if(trial % 2 === 0) {
+            stroopStimuli.randomShuffle(arr);
+        }
 
         const listener = event => {
             if (listening && (event.key === "ArrowRight" || event.key === "ArrowLeft")) {
-                let correction = "";
-                console.log(stimuliList[trial%length].target.color);
-                if (event.key === "ArrowLeft" && stimuliList[trial%length].target.color === leftOption.color) {
-                    correction = "correct";
+                answered = true;
+                let responseKey = "";
+                if(event.key === "ArrowRight") {
+                    responseKey = arr[1].color;
                 } else {
-                    correction = "wrong";
+                    responseKey = arr[0].color;
                 }
+                let correction = stroopStimuli.colorAnswer(stimuliList[trial%length].target.string, responseKey);
                 
-                let res = `"contion":"color", "trial":"${trial+1}", "response":"${event.key}", "correction":"${correction}"`;
+                let res = `"contion":"color", "trial":"${trial+1}", "response":"${event.key}", "correction":"${correction}", "spent":"${counter}s"`;
                 let tmp = [...result];
                 tmp.push(res);
                 setResult(tmp);
                 console.log(res);
+                trial++;
                 if(trial === totalTrails) {
                     trial = 0;
                     handleMoveToNextBlock();
-                } 
+                }
             }
-            trial++;
         }
 
         window.addEventListener('keydown', listener);
@@ -47,21 +59,9 @@ const ColorTrial = props => {
             window.removeEventListener('keydown', listener);
         }
 
-        if(trial % 8 === 0) {
-            stroopStimuli.randomShuffle(stimuliList);
-        }
-
-        let length = stimuliList.length;
-        const arr = [stimuliList[trial%length].target, stimuliList[trial%length].interference];
-
-        if(trial % 2 === 0) {
-            stroopStimuli.randomShuffle(arr);
-        }
-
         setQuestionColor("white");
         setQuestion(`請選擇顏色為『${stimuliList[trial%length].target.string}』的選項`);
-        setLeftOption({string:"", color:""});
-        setRightOption({string:"", color:""});
+        
 
         let countQuestion = setTimeout( () => {
             setQuestionColor("black");
@@ -76,6 +76,12 @@ const ColorTrial = props => {
             setLeftOption(arr[0]);
             setRightOption(arr[1]);
             listening = true;
+            let clock = setInterval( () => {
+                counter += 0.01;
+                if(answered) {
+                    clearInterval(clock);
+                }
+            } ,10)
         }, 3000)
 
         return () => {
@@ -83,6 +89,8 @@ const ColorTrial = props => {
             clearTimeout(gap);
             clearTimeout(countStimuli);
             removeEvent();
+            setLeftOption({string:"", color:""});
+            setRightOption({string:"", color:""});
         };
         // eslint-disable-next-line
     } ,[result])

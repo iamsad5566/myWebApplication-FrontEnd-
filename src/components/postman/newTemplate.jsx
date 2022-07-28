@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import authenticationService from '../../api/authenticationService';
-import manipulateData from '../../api/manipulateData';
+import manipulateData from '../../api/ManipulateData';
 import "../../css/textAreaForTemplate.css"
 import NavBar from '../../nav/nav';
 

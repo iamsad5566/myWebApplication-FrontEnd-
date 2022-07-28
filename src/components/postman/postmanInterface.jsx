@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import authenticationService from '../../api/authenticationService';
-import manipulateData from '../../api/manipulateData';
+import manipulateData from '../../api/ManipulateData';
 import NavBar from '../../nav/nav';
 import HeaderPostman from '../headers/headerPostman';
 import FirstTimeVisit from './firstTimeVisit';
